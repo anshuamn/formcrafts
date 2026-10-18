@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AI/ML Integration and Governance in Life Sciences | Doctoral Survey (ESGCI, Paris)</title>
+  <meta name="description" content="Doctoral research survey for ESGCI, Paris on AI/ML integration, Lean optimization, and regulatory governance in the life sciences sector." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>" />
+</head>
+<body>
+
+  <!-- Top Navigation Bar (Strictly Respondent View: No Admin / WhatsApp / Response Buttons) -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-icon">🧬</div>
+      <div class="brand-text">
+        <h1 id="app-display-name">PhDForm • AI Life Sciences</h1>
+        <div class="brand-tag">
+          <span class="badge-live"></span>
+          <span>ESGCI Paris Doctoral Study • Live Google Sync</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Glossary Side Pane Toggle -->
+      <button class="btn-icon" id="btn-toggle-glossary" title="View technical definitions">
+        <span>📖</span>
+        <span class="nav-btn-text">Definitions & Glossary</span>
+      </button>
+
+      <!-- Theme Toggle -->
+      <button class="btn-icon" id="theme-toggle" title="Toggle dark/light theme">
+        ☀️ Light
+      </button>
+    </div>
+  </header>
+
+  <!-- Sticky Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-info">
+      <span id="progress-text">0% Completed</span>
+      <span id="progress-fraction">0 of 42 statements answered</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Main Questionnaire Container -->
+  <main class="main-wrapper">
+    <div class="card-flow-container" id="card-container">
+      <!-- Dynamically populated by app.js -->
+      <div class="card" style="text-align: center; padding: 3rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem; animation: spinSlow 3s linear infinite;">⏳</div>
+        <h2>Loading Questionnaire...</h2>
+        <p style="color: var(--text-muted); margin-top: 0.5rem;">Connecting to verified study schema</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Academic Glossary & Definitions Side Pane (Non-Interactive, Strictly Objective) -->
+  <aside class="glossary-pane hidden" id="glossary-pane" aria-label="Academic Glossary & Key Definitions">
+    <div class="glossary-header">
+      <div class="glossary-title-group">
+        <span style="font-size: 1.2rem;">📖</span>
+        <div>
+          <h3>Academic Glossary</h3>
+          <span class="glossary-subtitle">ESGCI Paris Doctoral Study Reference</span>
+        </div>
+      </div>
+      <button class="btn-close" id="btn-close-glossary" aria-label="Close glossary">✕</button>
+    </div>
+
+    <div class="glossary-content" id="glossary-content">
+      <!-- Dynamically filled with GLOSSARY_TERMS -->
+    </div>
+  </aside>
+
+  <script src="js/app.js?v=20241018"></script>
+</body>
+</html>

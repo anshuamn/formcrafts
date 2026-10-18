@@ -1,0 +1,399 @@
+{
+  "meta": {
+    "title": "AI/ML Integration and Governance in the Life Sciences Sector",
+    "description": "This survey is part of doctoral research for ESGCI, Paris. Responses are confidential and anonymized.\nDear Participant,\nYou are invited to participate in a doctoral research study titled \"Integration of AI/ML-Based Technologies within the Life Sciences Sector: A Lean Credibility Framework for Ethical Adoption and Use of AI/ML Technologies.\" This study aims to evaluate the institutional readiness, strategic challenges, regulatory dimensions, and categorization of digital waste in operational AI/ML data pipelines.\nParticipation Details:\nEligibility: You are being invited because of your professional role, expertise, or interaction within the Lifesciences & Healthcare ecosystem.\nTime Commitment: This survey will take approximately 8 to 10 minutes to complete.\nVoluntary Participation: Your participation is completely voluntary. You may withdraw or stop answering at any time without any negative consequences or penalty.\nPrivacy & Confidentiality:\nAnonymity: All responses are completely anonymous. No personally identifiable information (PII) such as your name, email address, or specific organization name will be collected or stored in our database.\nData Security: The collected data will be securely stored on encrypted drives and will be accessed exclusively by the primary researcher for academic and statistical analysis.\nData Usage: The findings of this study will be published strictly in aggregate form within a doctoral dissertation, academic journals, and conference presentations.\nContact Information:\nIf you have any questions, concerns, or requests regarding this research, please feel free to contact the primary researcher at anshuaman7943@gmail.com or the supervising department at ESGCI, Paris.\nInformed Consent Confirmation:\nPlease read the statement below and indicate your choice.\nBy selecting \"I consent to participate,\" you acknowledge that you are at least 18 years of age, have read and understood the information above, and voluntarily agree to participate in this study.",
+    "form_id": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA",
+    "submit_url": "https://docs.google.com/forms/d/e/1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA/formResponse"
+  },
+  "questions": [
+    {
+      "index": 0,
+      "title": "Your Name",
+      "description": null,
+      "type": 0,
+      "type_name": "text",
+      "entry_id": "entry.1181035952"
+    },
+    {
+      "index": 1,
+      "title": "I consent to participate",
+      "description": null,
+      "type": 2,
+      "type_name": "choice",
+      "entry_id": "entry.1725388081",
+      "options": [
+        "Yes",
+        "No"
+      ]
+    },
+    {
+      "index": 2,
+      "title": "Demography and Respondent Profile",
+      "description": "This section captures functional role, organization type, size, and baseline AI maturity",
+      "type": 8,
+      "type_name": "section_header"
+    },
+    {
+      "index": 3,
+      "title": "Which age group do you belong to?",
+      "description": null,
+      "type": 2,
+      "type_name": "choice",
+      "entry_id": "entry.2143444154",
+      "options": [
+        "18-25",
+        "26-40",
+        "41-60",
+        "60 and above"
+      ]
+    },
+    {
+      "index": 4,
+      "title": "What is the approximate employee size of your organization?",
+      "description": null,
+      "type": 2,
+      "type_name": "choice",
+      "entry_id": "entry.1671827446",
+      "options": [
+        "Fewer than 250",
+        "250 – 1,000",
+        "1,001 – 5,000",
+        "More than 5,000"
+      ]
+    },
+    {
+      "index": 5,
+      "title": "Which of the following best describes the primary pharma domain you support?",
+      "description": "Select the most accurate option",
+      "type": 2,
+      "type_name": "choice",
+      "entry_id": "entry.1532007467",
+      "options": [
+        "Research & Development (Discovery / Preclinical)",
+        "Clinical Operations / Clinical Data Management",
+        "Regulatory Affairs / Compliance / Quality Assurance",
+        "Real World Evidence / Real World Data",
+        ""
+      ]
+    },
+    {
+      "index": 6,
+      "title": "Which of the following best describes your current or recent involvement with AI/ML technologies in pharmaceutical R&D or clinical development?",
+      "description": "Select the most accurate option",
+      "type": 2,
+      "type_name": "choice",
+      "entry_id": "entry.1072067879",
+      "options": [
+        "Direct implementation or technical development of AI/ML models",
+        "Strategic advisory, consulting, or project management for AI/ML initiatives",
+        "Regulatory, compliance, or quality assurance oversight of AI/ML workflows",
+        "Clinical data management involving AI/ML pipelines",
+        ""
+      ]
+    },
+    {
+      "index": 7,
+      "title": "Your Experience Level with AI/ML Projects",
+      "description": null,
+      "type": 2,
+      "type_name": "choice",
+      "entry_id": "entry.917859454",
+      "options": [
+        "Less than 2 years",
+        "2 – 3 years",
+        "More than 3 years"
+      ]
+    },
+    {
+      "index": 8,
+      "title": "AI/ML Governance, Readiness, and Process Efficiency  ",
+      "description": "Applicable to a broad technological implementation ranging from custom-developed predictive models and cloud-hosted infrastructure provided by hyperscalars, to enterprise applications utilizing Large Language Models (LLMs) with customized wrappers, orchestration layers, or domain-specific configurations.",
+      "type": 8,
+      "type_name": "section_header"
+    },
+    {
+      "index": 9,
+      "title": "Lean Optimization (LO):  \n\nPlease indicate your level of agreement with the following statements regarding process efficiency and \"Digital waste\" in your AI/ML data pipelines.",
+      "description": "Digital waste includes all data, computing resources and/or storage infrastructure used in AI/ML workflows which do not provide value to the model training, validation, deployment and/or business goals of the project. Examples include duplicate data extractions; redundant feature engineering; unused storage; stale model checkpoints and/or abandoned run logs.",
+      "type": 7,
+      "type_name": "likert_matrix",
+      "grid_rows": [
+        {
+          "entry_id": "entry.1873010389",
+          "label": "Our organization systematically maps data and workflow processes prior to AI/ML integration."
+        },
+        {
+          "entry_id": "entry.942139955",
+          "label": "Our organization actively identifies and eliminates digital waste within AI/ML pipelines."
+        },
+        {
+          "entry_id": "entry.1536426948",
+          "label": "AI/ML tools are deployed to resolve workflow bottlenecks rather than strictly automating existing inefficiencies."
+        },
+        {
+          "entry_id": "entry.1092855355",
+          "label": "Removing Digital waste from the pipeline have quantifiably reduced turnaround times for clinical data processing."
+        }
+      ],
+      "grid_cols": [
+        "Strongly Disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree",
+        "Not Applicable / Do not know"
+      ]
+    },
+    {
+      "index": 10,
+      "title": "Regulatory Alignment (RA):\nPlease indicate your level of agreement regarding how regulatory requirements (e.g., FDA credibility guidance, GxP) are integrated into your AI projects.",
+      "description": "Refers to the integration of compliance checkpoints, validation protocols, and governance standards (e.g., FDA software credibility guidance, GxP, 21 CFR Part 11) across all AI and machine learning (ML) project lifecycles. ",
+      "type": 7,
+      "type_name": "likert_matrix",
+      "grid_rows": [
+        {
+          "entry_id": "entry.1484603434",
+          "label": "Regulatory compliance checkpoints are embedded into the initial design phases of AI/ML project lifecycles."
+        },
+        {
+          "entry_id": "entry.1934426613",
+          "label": "GxP and 21 CFR Part 11 requirements are integrated throughout the continuous AI/ML development cycle."
+        },
+        {
+          "entry_id": "entry.1816757769",
+          "label": "The intended use and operational context of algorithmic tools are explicitly defined prior to clinical workflow integration."
+        },
+        {
+          "entry_id": "entry.1947311133",
+          "label": "Comprehensive audit trails are maintained for all AI/ML models utilized in regulatory submissions."
+        },
+        {
+          "entry_id": "entry.41981573",
+          "label": "Regulatory requirements for AI/ML tools are primarily addressed post-deployment."
+        }
+      ],
+      "grid_cols": [
+        "Strongly Disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree",
+        "Not Applicable / Do not know"
+      ]
+    },
+    {
+      "index": 11,
+      "title": "Ethical Governance (FATE):\nPlease state your level of agreement regarding how your organization operationalizes the FATE principles (Fairness, Accountability, Transparency, Explainability).",
+      "description": "This encompasses ensuring equitable model performance, clear human accountability, and transparent documentation.",
+      "type": 7,
+      "type_name": "likert_matrix",
+      "grid_rows": [
+        {
+          "entry_id": "entry.1111563036",
+          "label": "AI/ML models are audited for bias to ensure equitable performance across diverse demographic groups."
+        },
+        {
+          "entry_id": "entry.912616925",
+          "label": "Human accountability is explicitly defined for all AI/ML-assisted decisions and recommendations."
+        },
+        {
+          "entry_id": "entry.83820095",
+          "label": "Standardized documentation (e.g., model cards) is routinely generated to define model capabilities and limitations"
+        },
+        {
+          "entry_id": "entry.1572254393",
+          "label": "Accountability remain ambiguous when AI/ML systems produce erroneous or biased outputs."
+        },
+        {
+          "entry_id": "entry.2043095201",
+          "label": "Explainability tools (e.g., SHAP, LIME) are actively utilized to facilitate the review and comprehension of AI predictions."
+        }
+      ],
+      "grid_cols": [
+        "Strongly Disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree",
+        "Not Applicable / Do not know"
+      ]
+    },
+    {
+      "index": 12,
+      "title": "Oragnizational Readiness Assessment (ORA):\nPlease state your level of agreement regarding your organization’s preparedness (culture and infrastructure) for AI/ML projects",
+      "description": "Evaluates organizational preparedness, spanning leadership, culture, workforce skills, and IT infrastructure, to successfully adopt and scale AI/ML initiatives.  ",
+      "type": 7,
+      "type_name": "likert_matrix",
+      "grid_rows": [
+        {
+          "entry_id": "entry.1079788216",
+          "label": "Structured change-management strategies are utilized to support role adaptation during AI/ML integration."
+        },
+        {
+          "entry_id": "entry.1118670232",
+          "label": "Executive leadership provides adequate strategic guidance for AI/ML initiatives."
+        },
+        {
+          "entry_id": "entry.1571036750",
+          "label": "Our organization possesses the required IT infrastructure , i.e, computing, networking, and storage to effectively run AI models at scale."
+        },
+        {
+          "entry_id": "entry.1809793476",
+          "label": "Non-technical employees (e.g., clinicians, QA staff) has the competency to evaluate AI/ML model outputs."
+        },
+        {
+          "entry_id": "entry.1867331453",
+          "label": "Employees lack the requisite training to critically challenge AI/ML model outputs."
+        },
+        {
+          "entry_id": "entry.1906272213",
+          "label": "Data management practices ensure high data quality throughout AI/ML workflows."
+        },
+        {
+          "entry_id": "entry.1717468730",
+          "label": "Data security protocols are enforced across all AI/ML workflows."
+        },
+        {
+          "entry_id": "entry.62616853",
+          "label": "Leadership allocates the required resources for successful deployment of AI/ML projects."
+        }
+      ],
+      "grid_cols": [
+        "Strongly Disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree",
+        "Not Applicable / Do not know"
+      ]
+    },
+    {
+      "index": 13,
+      "title": "AI/ML Maturity, Adoption Feasibility, and Financial Risks ",
+      "description": "This section assesses structural readiness through your organization's current AI maturity stage, perceived adoption feasibility across life sciences value streams, and financial controls or ROI outcomes.  ",
+      "type": 8,
+      "type_name": "section_header"
+    },
+    {
+      "index": 14,
+      "title": "How would you characterize your organization's current baseline AI/ML maturity level?",
+      "description": null,
+      "type": 2,
+      "type_name": "choice",
+      "entry_id": "entry.1542765700",
+      "options": [
+        "Exploratory (Investigating use cases, no active pilots)",
+        "Pilot Phase (Running isolated proofs-of-concept)",
+        "Partially Scaled (Al models deployed in specific, siloed workflows)",
+        "Fully Integrated (Al is embedded continuously across multiple enterprise value streams)",
+        "Not Applicable / Do not know"
+      ]
+    },
+    {
+      "index": 15,
+      "title": "Perceived AI Adoption Feasibility (PAAF) \nBased on your organization’s current governance architecture, please evaluate the practical feasibility of deploying AI technologies into production.",
+      "description": null,
+      "type": 7,
+      "type_name": "likert_matrix",
+      "grid_rows": [
+        {
+          "entry_id": "entry.794949006",
+          "label": "A structured AI governance architecture directly enhances the practical feasibility of deploying AI/ML systems within our organization."
+        },
+        {
+          "entry_id": "entry.1666269803",
+          "label": "Integrating Lean waste-elimination methods with FDA credibility guidelines would significantly improve the daily operational utility of our AI/ML tools."
+        },
+        {
+          "entry_id": "entry.1812020616",
+          "label": "Comprehensive AI governance frameworks facilitate smoother cross-functional deployment of AI systems across R&D, Clinical Operations, Regulatory Affairs, and QA."
+        },
+        {
+          "entry_id": "entry.852230803",
+          "label": "The administrative burden of implementing structured AI/ML governance outweighs its potential strategic benefits for our organization."
+        },
+        {
+          "entry_id": "entry.172843418",
+          "label": "Standardized ethical review processes make AI/ML governance frameworks easier to navigate and adopt."
+        },
+        {
+          "entry_id": "entry.225758134",
+          "label": "It is highly realistic and achievable for our organization to fully operationalize a governed, compliant AI/ML pipeline within the next 1 to 3 years."
+        }
+      ],
+      "grid_cols": [
+        "Strongly Disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree",
+        "Not Applicable / Do not know"
+      ]
+    },
+    {
+      "index": 16,
+      "title": "Financial Risks (FR): \n\nBased on your organization’s current AI/ML adoption practices, what do you think about the financial risk and control measures are being practiced.",
+      "description": null,
+      "type": 7,
+      "type_name": "likert_matrix",
+      "grid_rows": [
+        {
+          "entry_id": "entry.844264810",
+          "label": "High uncertainty regarding the exact Return on Investment (ROI) of AI/ML governance delays our organizational decision-making process."
+        },
+        {
+          "entry_id": "entry.1164544336",
+          "label": "Securing budget approval for continuous AI/ML validation and governance oversight remains a significant organizational barrier."
+        },
+        {
+          "entry_id": "entry.1040565198",
+          "label": "Our organization readily allocates sufficient financial resources for proactive AI/ML governance and capability building."
+        },
+        {
+          "entry_id": "entry.1345365453",
+          "label": "The perceived high implementation costs of continuous AI/ML monitoring systems restrict broader deployment across our value streams."
+        }
+      ],
+      "grid_cols": [
+        "Strongly Disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree",
+        "Not Applicable / Do not know"
+      ]
+    },
+    {
+      "index": 17,
+      "title": "Which category best reflects the deployed AI system's actual Return on Investment (ROI) compared to initial projections?  ",
+      "description": null,
+      "type": 2,
+      "type_name": "choice",
+      "entry_id": "entry.144452311",
+      "options": [
+        "Failed to meet projections",
+        "Met projections",
+        "Exceeded projections by up to 15%",
+        "Exceeded projections by more than 15%",
+        "Too early to determine / ROI not yet formally measured",
+        "Not Applicable / Do not know",
+        ""
+      ]
+    },
+    {
+      "index": 18,
+      "title": "Closing",
+      "description": "Thank you for participating in this survey. Your insights are extremely valuable.",
+      "type": 8,
+      "type_name": "section_header"
+    },
+    {
+      "index": 19,
+      "title": "Your email address (Optional)",
+      "description": null,
+      "type": 0,
+      "type_name": "text",
+      "entry_id": "entry.1165371101"
+    }
+  ]
+}

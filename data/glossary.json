@@ -1,0 +1,80 @@
+[
+  {
+    "term": "Digital Waste",
+    "category": "Lean Optimization",
+    "definition": "Includes all data, computing resources, and storage infrastructure used in AI/ML workflows that do not provide direct value to model training, validation, deployment, or business outcomes. Examples include duplicate data extractions, redundant feature engineering, idle compute, and abandoned run logs."
+  },
+  {
+    "term": "Lean Optimization (LO)",
+    "category": "Operational Efficiency",
+    "definition": "Systematic mapping of data and workflow processes prior to AI/ML integration to actively detect bottlenecks and eliminate digital waste, thereby reducing clinical processing cycle times."
+  },
+  {
+    "term": "Regulatory Alignment (RA)",
+    "category": "Compliance & Standards",
+    "definition": "Embedding compliance checkpoints, validation protocols, and governance standards (e.g., FDA software credibility guidance, GxP, and 21 CFR Part 11) proactively into the continuous AI/ML lifecycle."
+  },
+  {
+    "term": "FDA Credibility Guidance",
+    "category": "Regulatory Standards",
+    "definition": "Regulatory frameworks from health authorities evaluating computational modeling and algorithmic credibility in clinical contexts, requiring defined intended use, verification & validation (V&V), and risk assessment."
+  },
+  {
+    "term": "GxP and 21 CFR Part 11",
+    "category": "Quality Assurance",
+    "definition": "Good Practice quality guidelines across laboratory, clinical, and manufacturing environments, alongside FDA regulations governing electronic records, electronic signatures, and tamper-evident audit trails."
+  },
+  {
+    "term": "FATE Principles",
+    "category": "Ethical Governance",
+    "definition": "• Fairness (F): Auditing models for bias across demographic and clinical groups.\n• Accountability (A): Defining explicit human accountability for AI-assisted recommendations.\n• Transparency (T): Producing standardized documentation such as Model Cards.\n• Explainability (E): Applying interpretability methods (e.g., SHAP, LIME) to facilitate clinical review."
+  },
+  {
+    "term": "Model Cards",
+    "category": "Transparency",
+    "definition": "Standardized benchmark documentation routinely generated to summarize an algorithmic model's architecture, intended clinical operational context, limitations, and performance boundaries."
+  },
+  {
+    "term": "SHAP and LIME",
+    "category": "Explainability",
+    "definition": "Explainable AI (XAI) toolkits used to calculate feature attribution scores, allowing clinicians, data scientists, and reviewers to comprehend why an AI model generated a specific prediction."
+  },
+  {
+    "term": "Organizational Readiness Assessment (ORA)",
+    "category": "Readiness & Culture",
+    "definition": "Evaluation of preparedness across leadership guidance, workforce competency, training programs, IT infrastructure (compute/networking/storage), and data security protocols."
+  },
+  {
+    "term": "AI/ML Maturity Levels",
+    "category": "Adoption Stages",
+    "definition": "• Exploratory: Investigating use cases, no active pilots.\n• Pilot Phase: Running isolated proof-of-concept projects.\n• Partially Scaled: Models deployed in specific, siloed workflows.\n• Fully Integrated: AI is embedded continuously across multiple enterprise value streams."
+  },
+  {
+    "term": "Perceived AI Adoption Feasibility (PAAF)",
+    "category": "Strategy & Adoption",
+    "definition": "Assessment of how practically and realistically an organization can transition governed AI/ML systems into operational life sciences production within 1 to 3 years."
+  },
+  {
+    "term": "Financial Risks (FR)",
+    "category": "Risk & Economics",
+    "definition": "Financial considerations including uncertainty over Return on Investment (ROI), securing budget for continuous validation, and perceived implementation costs of continuous monitoring."
+  },
+  {
+    "id": 1792342565825,
+    "term": "Test Term",
+    "category": "Test Category",
+    "definition": "This is a test definition"
+  },
+  {
+    "id": 1792342988395,
+    "term": "New Test Term",
+    "category": "Test Category",
+    "definition": "Test definition for new term"
+  },
+  {
+    "id": 1792343344177,
+    "term": "Test Term",
+    "category": "Test Category",
+    "definition": "Test definition"
+  }
+]

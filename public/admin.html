@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | PhDFORM Life Sciences</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
+  <style>
+    .admin-container {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      display: flex;
+      gap: 1.5rem;
+      min-height: calc(100vh - 120px);
+    }
+
+    .admin-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      border-right: 1px solid var(--border-color);
+      margin-bottom: 0;
+      padding-right: 1.5rem;
+      min-width: 220px;
+      flex-shrink: 0;
+    }
+
+    .admin-tab-btn {
+      background: transparent;
+      border: none;
+      border-left: 3px solid transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: var(--transition);
+      text-align: left;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    .admin-tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .admin-tab-btn.active {
+      color: var(--accent-primary);
+      border-left-color: var(--accent-primary);
+      background: rgba(99, 102, 241, 0.12);
+    }
+
+    .admin-tab-btn .tab-icon {
+      font-size: 1.1rem;
+      width: 1.5rem;
+      text-align: center;
+    }
+
+    .admin-section {
+      display: none;
+      animation: cardFadeIn 0.25s ease forwards;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .admin-section.active {
+      display: block;
+    }
+
+    .admin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--text-main);
+    }
+
+    .form-help {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .admin-input {
+      width: 100%;
+      max-width: 450px;
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .admin-input:focus {
+      border-color: var(--border-focus);
+    }
+
+    .admin-textarea {
+      width: 100%;
+      max-width: 600px;
+      min-height: 120px;
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      resize: vertical;
+    }
+
+    .admin-textarea:focus {
+      border-color: var(--border-focus);
+    }
+
+    .iframe-embed {
+      width: 100%;
+      height: 780px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: white;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--accent-primary);
+      margin-top: 0.35rem;
+    }
+
+    /* Glossary Management */
+    .glossary-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .glossary-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      align-items: flex-start;
+    }
+
+    .glossary-item-input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .glossary-item-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+
+    .btn-danger:hover {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-success {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+
+    .btn-success:hover {
+      background: #10b981;
+      color: white;
+    }
+
+    /* Google Form Import */
+    .import-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .import-step {
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+    }
+
+    .import-step h3 {
+      margin-bottom: 1rem;
+      color: var(--accent-primary);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .import-preview {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .import-preview table {
+      width: 100%;
+      font-size: 0.8rem;
+    }
+
+    .import-preview th, .import-preview td {
+      padding: 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Subheading/Tag editor */
+    .tag-preview {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag-preview .badge-live {
+      width: 6px;
+      height: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-icon" style="background: linear-gradient(135deg, #6366f1, #a855f7);">📝</div>
+      <div class="brand-text">
+        <h1 id="admin-header-title">FormCraft • Admin Control Panel</h1>
+        <div class="brand-tag">
+          <span class="badge-live"></span>
+          <span>Private Admin Panel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <a href="/" target="_blank" rel="noopener" class="btn-icon" title="View respondent survey link">
+        <span>👁️</span>
+        <span>View Respondent Form</span>
+      </a>
+      <button class="btn-icon" id="theme-toggle">☀️ Light</button>
+    </div>
+  </header>
+
+  <div class="admin-container">
+
+    <!-- Admin Navigation Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" onclick="switchTab('tab-settings')">
+        <span class="tab-icon">⚙️</span>
+        <span>Form & UI Settings</span>
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab-branding')">
+        <span class="tab-icon">🏷️</span>
+        <span>Branding & Tagline</span>
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab-glossary')">
+        <span class="tab-icon">📖</span>
+        <span>Glossary Management</span>
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab-import')">
+        <span class="tab-icon">📥</span>
+        <span>Google Form Import</span>
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab-google-form')">
+        <span class="tab-icon">📋</span>
+        <span>Google Form Embed</span>
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab-responses')">
+        <span class="tab-icon">📊</span>
+        <span>Responses & Sync</span>
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab-whatsapp')">
+        <span class="tab-icon">💬</span>
+        <span>WhatsApp Share Hub</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: FORM & UI SETTINGS -->
+    <div id="tab-settings" class="admin-section active">
+      <div class="admin-card">
+        <h2 style="font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 0.5rem;">Display & Branding Settings</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
+          Control how your survey appears to respondents. Changes take effect immediately.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="setting-app-name">Application Display Name</label>
+          <input type="text" id="setting-app-name" class="admin-input" value="PhDForm • AI Life Sciences" />
+          <div class="form-help">Displayed in the header and respondent view.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Respondent Share Link</label>
+          <div style="display: flex; gap: 0.5rem; max-width: 580px;">
+            <input type="text" id="respondent-url" class="admin-input" readonly value="http://localhost:3000/" style="flex: 1;" />
+            <button class="btn-primary" onclick="copyRespondentUrl()">📋 Copy Link</button>
+          </div>
+          <div class="form-help">Share this exact link with your survey participants.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Academic Glossary Side Pane</label>
+          <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; margin-top: 0.4rem;">
+            <input type="checkbox" id="setting-allow-glossary" checked style="width: 18px; height: 18px; accent-color: var(--accent-primary);" />
+            <span>Enable reference side pane with key terms (FATE, Digital Waste, GxP, FDA Credibility)</span>
+          </label>
+        </div>
+
+        <button class="btn-primary" onclick="saveSettings()">Save Settings ✓</button>
+        <span id="save-status" style="margin-left: 1rem; font-size: 0.88rem; color: var(--success); display: none;">Saved successfully!</span>
+      </div>
+    </div>
+
+    <!-- TAB 2: BRANDING & TAGLINE -->
+    <div id="tab-branding" class="admin-section">
+      <div class="admin-card">
+        <h2 style="font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 0.5rem;">Branding & Subheading</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
+          Customize the subheading shown in the respondent navbar and page metadata.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="setting-brand-tag">Navbar Subheading / Tagline</label>
+          <input type="text" id="setting-brand-tag" class="admin-input" value="ESGCI Paris Doctoral Study • Live Google Sync" />
+          <div class="form-help">Shown in the respondent navbar next to the live badge.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="setting-page-title">Page Title Suffix</label>
+          <input type="text" id="setting-page-title" class="admin-input" value="| Doctoral Survey (ESGCI, Paris)" />
+          <div class="form-help">Appended to the survey title in browser tab. Leave empty for no suffix.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Live Preview</label>
+          <div class="tag-preview" id="tag-preview">
+            <span class="badge-live"></span>
+            <span id="preview-tag-text">ESGCI Paris Doctoral Study • Live Google Sync</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="saveBranding()">Save Branding ✓</button>
+        <span id="branding-save-status" style="margin-left: 1rem; font-size: 0.88rem; color: var(--success); display: none;">Saved successfully!</span>
+      </div>
+    </div>
+
+    <!-- TAB 3: GLOSSARY MANAGEMENT -->
+    <div id="tab-glossary" class="admin-section">
+      <div class="admin-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.4rem;">Glossary Management</h2>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">
+              Add, edit, or remove glossary terms. These appear in the respondent's side pane.
+            </p>
+          </div>
+          <button class="btn-primary" onclick="addGlossaryTerm()">+ Add New Term</button>
+        </div>
+
+        <div class="glossary-list" id="glossary-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: GOOGLE FORM IMPORT -->
+    <div id="tab-import" class="admin-section">
+      <div class="admin-card">
+        <h2 style="font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 0.5rem;">Google Form Import</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
+          Import a new Google Form to replace the current survey schema. The form will be parsed and all questions, options, and sections will be added seamlessly.
+        </p>
+
+        <div class="import-section">
+          <div class="import-step">
+            <h3>Step 1: Enter Google Form URL</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="import-form-url">Google Form View URL</label>
+                <input type="url" id="import-form-url" class="admin-input" placeholder="https://docs.google.com/forms/d/e/FORM_ID/viewform" />
+                <div class="form-help">Paste the full viewform URL (not the edit URL)</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="import-form-id">Form ID (Auto-extracted)</label>
+                <input type="text" id="import-form-id" class="admin-input" readonly placeholder="Will be extracted from URL" />
+              </div>
+            </div>
+            <button class="btn-primary" onclick="fetchFormSchema()">🔍 Fetch & Preview Form Schema</button>
+          </div>
+
+          <div class="import-step" id="import-preview-section" style="display: none;">
+            <h3>Step 2: Preview Imported Schema</h3>
+            <div class="form-row">
+              <div class="form-group" style="flex: 1; min-width: 300px;">
+                <label class="form-label" for="import-survey-title">Survey Title</label>
+                <input type="text" id="import-survey-title" class="admin-input" />
+              </div>
+              <div class="form-group" style="flex: 1; min-width: 300px;">
+                <label class="form-label" for="import-survey-subtitle">Survey Subtitle</label>
+                <input type="text" id="import-survey-subtitle" class="admin-input" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="import-invitation-text">Invitation Text</label>
+              <textarea id="import-invitation-text" class="admin-textarea" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Questions Preview</label>
+              <div class="import-preview" id="import-questions-preview">
+                <!-- Populated after fetch -->
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="flex: 1; min-width: 300px;">
+                <label class="form-label" for="import-consent-text">Consent Details Text</label>
+                <textarea id="import-consent-text" class="admin-textarea" rows="6"></textarea>
+              </div>
+              <div class="form-group" style="flex: 1; min-width: 300px;">
+                <label class="form-label" for="import-consent-confirmation">Consent Confirmation Text</label>
+                <textarea id="import-consent-confirmation" class="admin-textarea" rows="6"></textarea>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="applyImportedSchema()">✅ Apply Imported Schema</button>
+            <button class="btn-secondary" onclick="cancelImport()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: EMBEDDED GOOGLE FORM -->
+    <div id="tab-google-form" class="admin-section">
+      <div class="admin-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.4rem;">Live Google Form Embed</h2>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">
+              Here is your actual Google Form embedded. You can verify form questions, options, and live sheet responses.
+            </p>
+          </div>
+          <a id="google-form-new-window" href="https://docs.google.com/forms/d/e/1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA/viewform" target="_blank" rel="noopener" class="btn-icon">
+            ↗️ Open in New Window
+          </a>
+        </div>
+
+        <iframe 
+          id="google-form-iframe"
+          class="iframe-embed"
+          src="https://docs.google.com/forms/d/e/1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA/viewform?embedded=true"
+          title="Google Form Embed">
+          Loading…
+        </iframe>
+      </div>
+    </div>
+
+    <!-- TAB 6: RESPONSES MANAGEMENT -->
+    <div id="tab-responses" class="admin-section">
+      <div class="admin-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.4rem;">Survey Responses & Google Sync</h2>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">
+              All submissions forward directly to your Google Form and are backed up here in real time.
+            </p>
+          </div>
+          <a id="download-csv-link" href="#" class="btn-primary" download>📥 Download All as CSV</a>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Total Recorded</div>
+            <div class="stat-value" id="stat-total">0</div>
+          </div>
+          <div class="stat-card">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Consented Participants</div>
+            <div class="stat-value" id="stat-consented" style="color: var(--success);">0</div>
+          </div>
+          <div class="stat-card">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Non-Consent / Exits</div>
+            <div class="stat-value" id="stat-declined" style="color: var(--warning);">0</div>
+          </div>
+          <div class="stat-card">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Google Form Sync</div>
+            <div class="stat-value" style="color: #818cf8; font-size: 1.25rem; margin-top: 0.6rem;">100% Active</div>
+          </div>
+        </div>
+
+        <div class="table-responsive" id="admin-responses-table">
+          Loading responses...
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 7: WHATSAPP SHARE HUB -->
+    <div id="tab-whatsapp" class="admin-section">
+      <div class="admin-card">
+        <h2 style="font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 0.5rem;">WhatsApp Share Hub (Admin Tool)</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.5rem;">
+          Easily generate 1-click WhatsApp invitations to send directly to your professional network. (Restricted to admin).
+        </p>
+
+        <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+          <a id="wa-share-btn-admin" href="#" target="_blank" rel="noopener" class="btn-primary btn-whatsapp" style="text-decoration: none;">
+            💬 Open in WhatsApp (1-Click Share) ➔
+          </a>
+          <button class="btn-secondary" onclick="copyAdminWaText()">
+            📋 Copy Invitation Text
+          </button>
+        </div>
+
+        <textarea id="admin-wa-text" readonly style="width: 100%; height: 160px; background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main); padding: 1rem; font-family: inherit; font-size: 0.9rem; resize: none; margin-bottom: 1.5rem;"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Get PIN from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const adminPin = urlParams.get("pin") || "";
+
+    // Helper to add PIN to fetch requests
+    function fetchWithPin(url, options = {}) {
+      const opts = { ...options };
+      if (opts.body && typeof opts.body === "string") {
+        const body = JSON.parse(opts.body);
+        body.pin = adminPin;
+        opts.body = JSON.stringify(body);
+      } else if (opts.method === "GET" || !opts.method) {
+        const separator = url.includes("?") ? "&" : "?";
+        url = url + separator + "pin=" + encodeURIComponent(adminPin);
+      }
+      return fetch(url, opts);
+    }
+
+    // Tab switching
+    function switchTab(tabId) {
+      document.querySelectorAll(".admin-tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".admin-section").forEach(s => s.classList.remove("active"));
+      
+      const targetBtn = Array.from(document.querySelectorAll(".admin-tab-btn")).find(b => b.getAttribute("onclick").includes(tabId));
+      if (targetBtn) targetBtn.classList.add("active");
+      
+      const targetSection = document.getElementById(tabId);
+      if (targetSection) targetSection.classList.add("active");
+
+      if (tabId === "tab-responses") loadResponses();
+      if (tabId === "tab-whatsapp") loadWhatsAppInfo();
+      if (tabId === "tab-glossary") loadGlossary();
+    }
+
+    // ========== SETTINGS TAB ==========
+    async function loadSettings() {
+      try {
+        const res = await fetchWithPin("/api/config");
+        const cfg = await res.json();
+        document.getElementById("setting-app-name").value = cfg.appName || "PhDForm • AI Life Sciences";
+        document.getElementById("setting-allow-glossary").checked = cfg.allowGlossary !== false;
+        document.getElementById("admin-header-title").textContent = (cfg.appName || "PhDForm") + " • Admin Control Panel";
+      } catch (e) {
+        console.error(e);
+      }
+      document.getElementById("respondent-url").value = window.location.origin + "/";
+    }
+
+    async function saveSettings() {
+      const appName = document.getElementById("setting-app-name").value.trim();
+      const allowGlossary = document.getElementById("setting-allow-glossary").checked;
+
+      try {
+        const res = await fetchWithPin("/api/config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ appName, allowGlossary })
+        });
+        const data = await res.json();
+        if (data.success) {
+          const status = document.getElementById("save-status");
+          status.style.display = "inline";
+          setTimeout(() => { status.style.display = "none"; }, 2500);
+          document.getElementById("admin-header-title").textContent = appName + " • Admin Control Panel";
+        }
+      } catch (e) {
+        alert("Failed to save settings: " + e.message);
+      }
+    }
+
+    function copyRespondentUrl() {
+      const box = document.getElementById("respondent-url");
+      box.select();
+      document.execCommand("copy");
+      alert("Respondent survey link copied to clipboard: " + box.value);
+    }
+
+    // ========== BRANDING TAB ==========
+    async function loadBranding() {
+      try {
+        const res = await fetchWithPin("/api/config");
+        const cfg = await res.json();
+        document.getElementById("setting-brand-tag").value = cfg.brandTag || "ESGCI Paris Doctoral Study • Live Google Sync";
+        document.getElementById("setting-page-title").value = cfg.pageTitleSuffix || "| Doctoral Survey (ESGCI, Paris)";
+        updateTagPreview();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function updateTagPreview() {
+      const tag = document.getElementById("setting-brand-tag").value;
+      document.getElementById("preview-tag-text").textContent = tag || "ESGCI Paris Doctoral Study • Live Google Sync";
+    }
+
+    async function saveBranding() {
+      const brandTag = document.getElementById("setting-brand-tag").value.trim();
+      const pageTitleSuffix = document.getElementById("setting-page-title").value.trim();
+
+      try {
+        const res = await fetchWithPin("/api/config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ brandTag, pageTitleSuffix })
+        });
+        const data = await res.json();
+        if (data.success) {
+          const status = document.getElementById("branding-save-status");
+          status.style.display = "inline";
+          setTimeout(() => { status.style.display = "none"; }, 2500);
+        }
+      } catch (e) {
+        alert("Failed to save branding: " + e.message);
+      }
+    }
+
+    // ========== GLOSSARY MANAGEMENT ==========
+    async function loadGlossary() {
+      try {
+        const res = await fetchWithPin("/api/glossary");
+        const data = await res.json();
+        renderGlossaryList(data.glossary || []);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderGlossaryList(terms) {
+      const container = document.getElementById("glossary-list");
+      if (terms.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No glossary terms yet. Click "Add New Term" to create one.</div>';
+        return;
+      }
+      container.innerHTML = terms.map((term, index) => `
+        <div class="glossary-item" data-id="${term.id || index}">
+          <div class="glossary-item-input" style="flex: 2;">
+            <label class="form-label" style="margin-bottom: 0.25rem;">Term</label>
+            <input type="text" class="admin-input" value="${escapeHtml(term.term)}" onchange="updateGlossaryTerm(${index}, 'term', this.value)" />
+          </div>
+          <div class="glossary-item-input" style="flex: 1.5;">
+            <label class="form-label" style="margin-bottom: 0.25rem;">Category</label>
+            <input type="text" class="admin-input" value="${escapeHtml(term.category)}" onchange="updateGlossaryTerm(${index}, 'category', this.value)" />
+          </div>
+          <div class="glossary-item-input" style="flex: 3;">
+            <label class="form-label" style="margin-bottom: 0.25rem;">Definition</label>
+            <textarea class="admin-textarea" rows="2" onchange="updateGlossaryTerm(${index}, 'definition', this.value)">${escapeHtml(term.definition)}</textarea>
+          </div>
+          <div class="glossary-item-actions">
+            <button class="btn-primary btn-sm btn-success" onclick="saveGlossaryTerm(${index})">💾 Save</button>
+            <button class="btn-primary btn-sm btn-danger" onclick="deleteGlossaryTerm(${index})">🗑️ Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function addGlossaryTerm() {
+      const container = document.getElementById("glossary-list");
+      const newIndex = Date.now();
+      const newTerm = { id: newIndex, term: "", category: "", definition: "" };
+      const div = document.createElement("div");
+      div.className = "glossary-item";
+      div.dataset.id = newIndex;
+      div.innerHTML = `
+        <div class="glossary-item-input" style="flex: 2;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Term</label>
+          <input type="text" class="admin-input" value="" onchange="updateGlossaryTerm(${newIndex}, 'term', this.value)" />
+        </div>
+        <div class="glossary-item-input" style="flex: 1.5;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Category</label>
+          <input type="text" class="admin-input" value="" onchange="updateGlossaryTerm(${newIndex}, 'category', this.value)" />
+        </div>
+        <div class="glossary-item-input" style="flex: 3;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Definition</label>
+          <textarea class="admin-textarea" rows="2" onchange="updateGlossaryTerm(${newIndex}, 'definition', this.value)"></textarea>
+        </div>
+        <div class="glossary-item-actions">
+          <button class="btn-primary btn-sm btn-success" onclick="saveGlossaryTerm(${newIndex})">💾 Save</button>
+          <button class="btn-primary btn-sm btn-danger" onclick="deleteGlossaryTerm(${newIndex})">🗑️ Delete</button>
+        </div>
+      `;
+      container.appendChild(div);
+    }
+
+    let glossaryBuffer = {};
+
+    function updateGlossaryTerm(index, field, value) {
+      if (!glossaryBuffer[index]) glossaryBuffer[index] = {};
+      glossaryBuffer[index][field] = value;
+    }
+
+    async function saveGlossaryTerm(index) {
+      const term = glossaryBuffer[index];
+      if (!term || !term.term || !term.category || !term.definition) {
+        alert("Please fill in all fields: Term, Category, and Definition");
+        return;
+      }
+      term.id = index;
+      try {
+        const res = await fetchWithPin("/api/glossary", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "upsert", term })
+        });
+        const data = await res.json();
+        if (data.success) {
+          glossaryBuffer[index] = {};
+          alert("Glossary term saved!");
+          loadGlossary(); // Reload to get server-assigned IDs
+        }
+      } catch (e) {
+        alert("Failed to save: " + e.message);
+      }
+    }
+
+    async function deleteGlossaryTerm(index) {
+      if (!confirm("Delete this glossary term?")) return;
+      try {
+        const res = await fetchWithPin("/api/glossary", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "delete", index })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loadGlossary();
+        }
+      } catch (e) {
+        alert("Failed to delete: " + e.message);
+      }
+    }
+
+    // ========== GOOGLE FORM IMPORT ==========
+    function extractFormId(url) {
+      const match = url.match(/\/forms\/d\/e\/([^\/]+)/);
+      return match ? match[1] : null;
+    }
+
+    document.getElementById("import-form-url").addEventListener("input", (e) => {
+      const formId = extractFormId(e.target.value);
+      if (formId) document.getElementById("import-form-id").value = formId;
+    });
+
+    async function fetchFormSchema() {
+      const url = document.getElementById("import-form-url").value.trim();
+      const formId = extractFormId(url);
+      if (!formId) {
+        alert("Invalid Google Form URL. Please use the viewform URL.");
+        return;
+      }
+
+      try {
+        const btn = event.target;
+        btn.disabled = true;
+        btn.textContent = "⏳ Fetching...";
+
+        const res = await fetchWithPin("/api/import/google-form", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ formId })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          populateImportPreview(data.schema);
+          document.getElementById("import-preview-section").style.display = "block";
+        } else {
+          alert("Failed to fetch form: " + (data.error || "Unknown error"));
+        }
+      } catch (e) {
+        alert("Error fetching form: " + e.message);
+      } finally {
+        const btn = event.target;
+        btn.disabled = false;
+        btn.textContent = "🔍 Fetch & Preview Form Schema";
+      }
+    }
+
+    function populateImportPreview(schema) {
+      document.getElementById("import-survey-title").value = schema.title || "";
+      document.getElementById("import-survey-subtitle").value = schema.subtitle || "";
+      document.getElementById("import-invitation-text").value = schema.invitationText || "";
+      document.getElementById("import-consent-text").value = schema.consentDetails || "";
+      document.getElementById("import-consent-confirmation").value = schema.consentConfirmation || "";
+
+      // Build questions preview table
+      let html = '<table><thead><tr><th>#</th><th>Section</th><th>Type</th><th>Title</th><th>Entry ID</th><th>Options/Rows</th></tr></thead><tbody>';
+      let qNum = 1;
+      if (schema.sections) {
+        schema.sections.forEach(sec => {
+          if (sec.questions) {
+            sec.questions.forEach(q => {
+              let opts = "";
+              if (q.options) opts = q.options.map(o => o.label || o).join(", ");
+              else if (q.statements) opts = q.statements.map(s => s.text).join("; ");
+              html += `<tr><td>${qNum++}</td><td>${sec.title}</td><td>${q.type}</td><td>${escapeHtml(q.title)}</td><td>${q.entryId || "-"}</td><td>${escapeHtml(opts.substring(0, 100))}${opts.length > 100 ? "..." : ""}</td></tr>`;
+            });
+          }
+        });
+      }
+      html += '</tbody></table>';
+      document.getElementById("import-questions-preview").innerHTML = html;
+    }
+
+    function cancelImport() {
+      document.getElementById("import-preview-section").style.display = "none";
+      document.getElementById("import-form-url").value = "";
+      document.getElementById("import-form-id").value = "";
+    }
+
+    async function applyImportedSchema() {
+      const schema = {
+        title: document.getElementById("import-survey-title").value.trim(),
+        subtitle: document.getElementById("import-survey-subtitle").value.trim(),
+        invitationText: document.getElementById("import-invitation-text").value.trim(),
+        consentDetails: document.getElementById("import-consent-text").value.trim(),
+        consentConfirmation: document.getElementById("import-consent-confirmation").value.trim(),
+        // The full schema was already fetched and stored server-side
+      };
+
+      if (!schema.title) {
+        alert("Please enter a survey title");
+        return;
+      }
+
+      try {
+        const btn = event.target;
+        btn.disabled = true;
+        btn.textContent = "⏳ Applying...";
+
+        // The schema is already on server from fetch step, just need to confirm
+        const res = await fetchWithPin("/api/import/apply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(schema)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          alert("Schema applied successfully! The respondent view will now use the new form.");
+          cancelImport();
+          loadSettings(); // Reload config to update UI
+        } else {
+          alert("Failed to apply: " + (data.error || "Unknown error"));
+        }
+      } catch (e) {
+        alert("Error applying schema: " + e.message);
+      } finally {
+        const btn = event.target;
+        btn.disabled = false;
+        btn.textContent = "✅ Apply Imported Schema";
+      }
+    }
+
+    // ========== RESPONSES ==========
+    async function loadResponses() {
+      const container = document.getElementById("admin-responses-table");
+      try {
+        const res = await fetchWithPin("/api/responses");
+        const data = await res.json();
+
+        document.getElementById("stat-total").textContent = data.total;
+        const consented = data.responses.filter(r => r.consented !== false).length;
+        document.getElementById("stat-consented").textContent = consented;
+        document.getElementById("stat-declined").textContent = data.total - consented;
+
+        if (data.responses.length === 0) {
+          container.innerHTML = "<div style='text-align: center; padding: 2rem; color: var(--text-muted);'>No responses submitted yet.</div>";
+          return;
+        }
+
+        container.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Respondent</th>
+                <th>Consent</th>
+                <th>Timestamp</th>
+                <th>Source</th>
+                <th>Google Sync</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.responses.map(r => `
+                <tr>
+                  <td><strong>${escapeHtml(r.respondentName || 'Anonymous')}</strong></td>
+                  <td>
+                    <span class="sync-badge ${r.consented !== false ? 'yes' : 'no'}">
+                      ${r.consented !== false ? 'Consented' : 'Declined'}
+                    </span>
+                  </td>
+                  <td>${new Date(r.timestamp).toLocaleString()}</td>
+                  <td><span style="font-size: 0.75rem; color: var(--text-muted);">${r.source || 'web'}</span></td>
+                  <td>
+                    <span class="sync-badge ${r.googleSync?.synced ? 'yes' : 'no'}">
+                      ${r.googleSync?.synced ? '✓ Synced' : 'Local'}
+                    </span>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `;
+      } catch (e) {
+        container.innerHTML = `<div style="color: var(--danger);">Failed to load responses: ${e.message}</div>`;
+      }
+    }
+
+    // ========== WHATSAPP ==========
+    async function loadWhatsAppInfo() {
+      try {
+        const res = await fetchWithPin("/api/whatsapp/invite");
+        const data = await res.json();
+        document.getElementById("wa-share-btn-admin").href = data.shareUrl;
+        document.getElementById("admin-wa-text").value = data.messageText;
+      } catch (e) {}
+    }
+
+    function copyAdminWaText() {
+      const box = document.getElementById("admin-wa-text");
+      box.select();
+      document.execCommand("copy");
+      alert("WhatsApp invitation text copied!");
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/"/g, '"').replace(/'/g, "'");
+    }
+
+    // ========== INIT ==========
+    document.addEventListener("DOMContentLoaded", () => {
+      const saved = localStorage.getItem("jotform_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+      document.getElementById("theme-toggle").textContent = saved === "dark" ? "☀️ Light" : "🌙 Dark";
+      
+      loadSettings();
+      loadBranding();
+      
+      // Update download CSV link with PIN
+      document.getElementById("download-csv-link").href = "/api/responses/csv?pin=" + encodeURIComponent(adminPin);
+      
+      // Update Google Form embed iframe and link with current form ID
+      updateGoogleFormEmbed();
+    });
+
+    // Theme toggle
+    const themeBtn = document.getElementById("theme-toggle");
+    themeBtn.addEventListener("click", () => {
+      const curr = document.documentElement.getAttribute("data-theme") || "dark";
+      const next = curr === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("jotform_theme", next);
+      themeBtn.textContent = next === "dark" ? "☀️ Light" : "🌙 Dark";
+    });
+
+    function updateGoogleFormEmbed() {
+      // Fetch current form ID from config
+      fetchWithPin("/api/config").then(r => r.json()).then(cfg => {
+        const formUrl = cfg.googleFormUrl || "https://docs.google.com/forms/d/e/1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA/viewform";
+        const embedUrl = formUrl + (formUrl.includes("?") ? "&" : "?") + "embedded=true";
+        document.getElementById("google-form-iframe").src = embedUrl;
+        document.getElementById("google-form-new-window").href = formUrl;
+      });
+    }
+  </script>
+</body>
+</html>

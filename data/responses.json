@@ -1,0 +1,244 @@
+[
+  {
+    "id": "resp_1792334874766_q135h7",
+    "timestamp": "2026-10-18T14:47:54.766Z",
+    "respondentName": "Test Dr. Watson",
+    "email": "watson@pharma-research.org",
+    "source": "system_validation",
+    "answers": {
+      "entry.1873010389": "Agree",
+      "entry.62616853": "Agree",
+      "entry.917859454": "Advanced (3-5 years)",
+      "entry.2143444154": "35-44",
+      "entry.1867331453": "Disagree",
+      "entry.1072067879": "Clinical or domain SME collaborating with AI teams",
+      "entry.1165371101": "watson@pharma-research.org",
+      "entry.1542765700": "Level 3: Defined / Standardized (Enterprise governance policies, shared infrastructure)",
+      "entry.1572254393": "Disagree",
+      "entry.41981573": "Disagree",
+      "entry.794949006": "Strongly Agree",
+      "entry.1717468730": "Strongly Agree",
+      "entry.1809793476": "Neutral",
+      "entry.1164544336": "Agree",
+      "entry.1571036750": "Strongly Agree",
+      "entry.1111563036": "Agree",
+      "entry.1947311133": "Agree",
+      "entry.144452311": "Met initial expectations (80-110% of projected ROI)",
+      "entry.83820095": "Agree",
+      "entry.172843418": "Agree",
+      "entry.225758134": "Strongly Agree",
+      "entry.1118670232": "Agree",
+      "entry.852230803": "Disagree",
+      "entry.1040565198": "Neutral",
+      "entry.1725388081": "Yes, I consent to participate",
+      "entry.1345365453": "Disagree",
+      "entry.2043095201": "Agree",
+      "entry.844264810": "Agree",
+      "entry.1484603434": "Strongly Agree",
+      "entry.942139955": "Strongly Agree",
+      "entry.1532007467": "Clinical Development & Operations",
+      "entry.1092855355": "Agree",
+      "entry.1671827446": "Large (501-5,000 employees)",
+      "entry.1934426613": "Agree",
+      "entry.1816757769": "Strongly Agree",
+      "entry.1906272213": "Strongly Agree",
+      "entry.1079788216": "Agree",
+      "entry.1666269803": "Agree",
+      "entry.1812020616": "Strongly Agree",
+      "entry.1181035952": "Test Dr. Watson",
+      "entry.1536426948": "Agree",
+      "entry.912616925": "Strongly Agree"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792340574076_zoytnn",
+    "timestamp": "2026-10-18T16:22:54.076Z",
+    "respondentName": "Anonymous",
+    "consented": false,
+    "email": null,
+    "source": "test",
+    "answers": {
+      "entry.1725388081": "No"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792340579019_ydzg70",
+    "timestamp": "2026-10-18T16:22:59.019Z",
+    "respondentName": "Test User",
+    "consented": true,
+    "email": null,
+    "source": "test",
+    "answers": {
+      "entry.1725388081": "Yes",
+      "entry.1181035952": "Test User"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792340823981_dgbcvi",
+    "timestamp": "2026-10-18T16:27:03.981Z",
+    "respondentName": "Test User",
+    "consented": true,
+    "email": null,
+    "source": "test",
+    "answers": {
+      "entry.1725388081": "Yes",
+      "entry.1181035952": "Test User"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792340830132_c4ush0",
+    "timestamp": "2026-10-18T16:27:10.132Z",
+    "respondentName": "Anonymous",
+    "consented": false,
+    "email": null,
+    "source": "test",
+    "answers": {
+      "entry.1725388081": "No"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792341235361_07mbzz",
+    "timestamp": "2026-10-18T16:33:55.361Z",
+    "respondentName": "Test User",
+    "consented": true,
+    "email": null,
+    "source": "test",
+    "answers": {
+      "entry.1725388081": "Yes",
+      "entry.1181035952": "Test User"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792341238360_h2x5gd",
+    "timestamp": "2026-10-18T16:33:58.360Z",
+    "respondentName": "Anonymous",
+    "consented": false,
+    "email": null,
+    "source": "test",
+    "answers": {
+      "entry.1725388081": "No"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792341687071_k9vwbz",
+    "timestamp": "2026-10-18T16:41:27.071Z",
+    "respondentName": "Test User",
+    "consented": true,
+    "email": null,
+    "source": "test",
+    "answers": {
+      "entry.1725388081": "Yes",
+      "entry.1181035952": "Test User"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792341691185_4mr8ev",
+    "timestamp": "2026-10-18T16:41:31.185Z",
+    "respondentName": "Anonymous",
+    "consented": false,
+    "email": null,
+    "source": "test",
+    "answers": {
+      "entry.1725388081": "No"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  },
+  {
+    "id": "resp_1792341831420_qxrdc6",
+    "timestamp": "2026-10-18T16:43:51.420Z",
+    "respondentName": "Anonymous",
+    "consented": true,
+    "email": null,
+    "source": "jotform_cards_ui",
+    "answers": {
+      "entry.2143444154": "41-60",
+      "entry.1671827446": "250 – 1,000",
+      "entry.1532007467": "Clinical Operations / Clinical Data Management",
+      "entry.1072067879": "Regulatory, compliance, or quality assurance oversight of AI/ML workflows",
+      "entry.917859454": "More than 3 years",
+      "entry.1873010389": "Agree",
+      "entry.942139955": "Neutral",
+      "entry.1536426948": "Agree",
+      "entry.1092855355": "Strongly Agree",
+      "entry.1484603434": "Neutral",
+      "entry.1816757769": "Agree",
+      "entry.1934426613": "Disagree",
+      "entry.1947311133": "Strongly Agree",
+      "entry.41981573": "Agree",
+      "entry.1111563036": "Not Applicable / Do not know",
+      "entry.912616925": "Agree",
+      "entry.83820095": "Strongly Agree",
+      "entry.1572254393": "Strongly Agree",
+      "entry.2043095201": "Strongly Agree",
+      "entry.1079788216": "Agree",
+      "entry.1118670232": "Strongly Agree",
+      "entry.1571036750": "Agree",
+      "entry.1809793476": "Strongly Agree",
+      "entry.1867331453": "Strongly Agree",
+      "entry.1906272213": "Strongly Agree",
+      "entry.1717468730": "Agree",
+      "entry.62616853": "Strongly Agree",
+      "entry.1542765700": "Pilot Phase (Running isolated proofs-of-concept)",
+      "entry.794949006": "Agree",
+      "entry.1666269803": "Strongly Agree",
+      "entry.1812020616": "Agree",
+      "entry.852230803": "Strongly Agree",
+      "entry.172843418": "Agree",
+      "entry.225758134": "Strongly Agree",
+      "entry.844264810": "Agree",
+      "entry.1164544336": "Strongly Agree",
+      "entry.1040565198": "Agree",
+      "entry.1345365453": "Strongly Agree",
+      "entry.144452311": "Met projections"
+    },
+    "googleSync": {
+      "synced": true,
+      "status": 200,
+      "targetForm": "1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA"
+    }
+  }
+]

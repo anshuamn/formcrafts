@@ -1,0 +1,10 @@
+{
+  "appName": "AI Adoption in Life Sciences Survey by Anshu Aman",
+  "theme": "dark",
+  "allowGlossary": true,
+  "adminPin": "admin123",
+  "googleFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA/viewform",
+  "googleFormEmbedUrl": "https://docs.google.com/forms/d/e/1FAIpQLSeGwlc4mfUdprKYeytCRcFksRob7KdkX3UEdkm6J5ChW_NtwA/viewform?embedded=true",
+  "brandTag": "New Custom Tagline",
+  "pageTitleSuffix": "| My Survey"
+}
