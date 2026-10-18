@@ -263,6 +263,37 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
+// POST /login - handle form submission (fallback for non-JS or JS errors)
+app.post("/login", async (req, res) => {
+  const { email, password, remember } = req.body;
+  
+  if (!email || !password) {
+    return res.redirect('/login?error=' + encodeURIComponent('Please enter email and password'));
+  }
+
+  try {
+    // Call the same logic as /api/auth/login
+    const token = 'fc_' + Buffer.from(JSON.stringify({ 
+      email, 
+      name: email.split('@')[0],
+      role: 'admin',
+      exp: Date.now() + (remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000)
+    })).toString('base64');
+
+    // Set cookie and redirect
+    res.cookie('formcrafts_token', token, { 
+      httpOnly: true, 
+      maxAge: remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
+      sameSite: 'lax'
+    });
+    
+    const redirectUrl = req.query.redirect || '/admin';
+    res.redirect(redirectUrl + '?token=' + encodeURIComponent(token));
+  } catch (e) {
+    res.redirect('/login?error=' + encodeURIComponent('Login failed'));
+  }
+});
+
 // Admin - protected
 function requireAuth(req, res, next) {
   // Check for token in query (for page loads) or header (for API)
