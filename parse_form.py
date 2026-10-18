@@ -70,7 +70,7 @@ output = {
     "questions": questions
 }
 
-with open("d:/jotforms/form_schema.json", "w", encoding="utf-8") as out_f:
+with open("D:/formcrafts/form_schema.json", "w", encoding="utf-8") as out_f:
     json.dump(output, out_f, indent=2, ensure_ascii=False)
 
 print("Parsed successfully!")

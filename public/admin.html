@@ -1013,7 +1013,7 @@
 
     // ========== INIT ==========
     document.addEventListener("DOMContentLoaded", () => {
-      const saved = localStorage.getItem("jotform_theme") || "dark";
+      const saved = localStorage.getItem("formcrafts_theme") || "dark";
       document.documentElement.setAttribute("data-theme", saved);
       document.getElementById("theme-toggle").textContent = saved === "dark" ? "☀️ Light" : "🌙 Dark";
       
@@ -1033,7 +1033,7 @@
       const curr = document.documentElement.getAttribute("data-theme") || "dark";
       const next = curr === "dark" ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
-      localStorage.setItem("jotform_theme", next);
+      localStorage.setItem("formcrafts_theme", next);
       themeBtn.textContent = next === "dark" ? "☀️ Light" : "🌙 Dark";
     });
 

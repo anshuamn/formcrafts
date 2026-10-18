@@ -1,7 +1,7 @@
 {
-  "name": "phd-jotform-ai",
+  "name": "phd-formcrafts-ai",
   "version": "1.0.0",
-  "description": "Jotform-style AI Form Agent with Google Forms integration and mobile Likert scales for PhD research",
+  "description": "FormCrafts AI Form Agent with Google Forms integration and mobile Likert scales for PhD research",
   "main": "server.js",
   "type": "module",
   "scripts": {

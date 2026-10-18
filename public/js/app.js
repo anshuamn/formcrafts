@@ -1,4 +1,4 @@
-// PhDFORM - AI Life Sciences (Jotform Card Engine)
+// PhDFORM - AI Life Sciences (FormCrafts Card Engine)
 let schema = null;
 let flatItems = []; // Grouped cards: Welcome, Consent, Demographic questions, Likert Matrix blocks, Submit
 let currentIndex = 0;
@@ -23,14 +23,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function setupTheme() {
-  const saved = localStorage.getItem("jotform_theme") || "dark";
+  const saved = localStorage.getItem("formcrafts_theme") || "dark";
   document.documentElement.setAttribute("data-theme", saved);
   themeToggle.textContent = saved === "dark" ? "Light" : "Dark";
   themeToggle.addEventListener("click", () => {
     const curr = document.documentElement.getAttribute("data-theme") || "dark";
     const next = curr === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("jotform_theme", next);
+    localStorage.setItem("formcrafts_theme", next);
     themeToggle.textContent = next === "dark" ? "Light" : "Dark";
   });
 
@@ -234,7 +234,7 @@ function showConsentDeclinedScreen() {
 }
 
 async function submitConsentDecline() {
-  try { await fetch("/api/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answers, metadata: { source: "jotform_cards_ui", userAgent: navigator.userAgent } }) }); }
+  try { await fetch("/api/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answers, metadata: { source: "formcrafts_cards_ui", userAgent: navigator.userAgent } }) }); }
   catch (err) { console.error("Failed to record consent decline", err); }
 }
 
@@ -265,7 +265,7 @@ async function submitSurvey() {
   const btn = document.getElementById("btn-submit-survey");
   if (btn) { btn.disabled = true; btn.innerHTML = '<span style="display:inline-block; animation: spinSlow 1s linear infinite;">[...]</span> Submitting to Google Form...'; }
   try {
-    const res = await fetch("/api/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answers, metadata: { source: "jotform_cards_ui", userAgent: navigator.userAgent } }) });
+    const res = await fetch("/api/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answers, metadata: { source: "formcrafts_cards_ui", userAgent: navigator.userAgent } }) });
     const data = await res.json();
     if (data.success) { renderSuccessScreen(data); } else { alert("Submission error: " + (data.error || "Unknown issue")); if (btn) { btn.disabled = false; btn.innerHTML = "Retry Submission"; } }
   } catch (err) { console.error("Submission failed", err); alert("Network error submitting response. Please check your connection."); if (btn) { btn.disabled = false; btn.innerHTML = "Retry Submission"; } } finally { isSubmitting = false; }

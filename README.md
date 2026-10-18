@@ -1,6 +1,6 @@
-# FormCraft.io (Jotform Alternative)
+# FormCrafts
 
-A conversational AI-assisted survey platform recreating the Jotform experience, purpose-built for revamping Google Form or Microsoft Form displays. Providing you more controls and flexibility to design your surveys, with advanced features like conversational AI assistance, mobile-first design, WhatsApp, Gmail or LinkedIn sharing, and many more.
+An AI-assisted survey platform for doctoral research, purpose-built for revamping Google Form or Microsoft Form displays. Providing you more controls and flexibility to design your surveys, with advanced features like conversational AI assistance, mobile-first design, WhatsApp, Gmail or LinkedIn sharing, and many more.
 
 ---
 
@@ -37,7 +37,7 @@ A conversational AI-assisted survey platform recreating the Jotform experience, 
 ### Installation & Launch
 ```bash
 # Navigate to the project directory
-cd d:\jotforms
+cd d:\formcrafts
 
 # Install dependencies
 npm install
@@ -54,12 +54,12 @@ Open your browser at:
 ## 📁 Project Structure
 
 ```
-d:\jotforms\
+d:\formcrafts\
 ├── data\
 │   └── responses.json      # Local audit trail & submitted responses
 ├── public\
 │   ├── css\
-│   │   └── style.css       # Jotform-inspired card & mobile Likert styling
+│   │   └── style.css       # FormCrafts-inspired card & mobile Likert styling
 │   ├── js\
 │   │   └── app.js          # Card navigation, AI agent, and submission logic
 │   └── index.html          # Single-page web application
