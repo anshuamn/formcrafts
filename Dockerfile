@@ -15,6 +15,10 @@ COPY . .
 # Production stage
 FROM node:20-alpine AS runner
 
+# Cache buster - change this to force rebuild
+ARG CACHE_BUST=1
+ENV CACHE_BUST=${CACHE_BUST}
+
 WORKDIR /app
 
 ENV NODE_ENV=production
