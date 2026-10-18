@@ -12,6 +12,7 @@ class AdminApp {
   }
 
   async init() {
+    this.initTheme();
     this.setupEventListeners();
     this.setupTabs();
     this.setupDropdowns();
@@ -1092,6 +1093,19 @@ class AdminApp {
   }
 
   // Theme
+  initTheme() {
+    const saved = localStorage.getItem('formcrafts_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    this.updateThemeIcon(saved);
+    // Sync theme changes across tabs
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'formcrafts_theme' && e.newValue) {
+        document.documentElement.setAttribute('data-theme', e.newValue);
+        this.updateThemeIcon(e.newValue);
+      }
+    });
+  }
+
   toggleTheme() {
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'light' ? 'dark' : 'light';
@@ -1101,7 +1115,8 @@ class AdminApp {
   }
 
   updateThemeIcon(theme) {
-    document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀️' : '🌙';
+    const icon = document.getElementById('theme-icon');
+    if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
   }
 
   // Toast

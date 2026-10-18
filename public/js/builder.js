@@ -12,7 +12,19 @@ class FormBuilder {
     this.autoSaveTimer = null;
   }
 
+  initTheme() {
+    const saved = localStorage.getItem('formcrafts_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    // Sync theme changes across tabs
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'formcrafts_theme' && e.newValue) {
+        document.documentElement.setAttribute('data-theme', e.newValue);
+      }
+    });
+  }
+
   async init() {
+    this.initTheme();
     this.formId = this.getFormIdFromUrl();
     this.setupEventListeners();
     this.setupDragDrop();

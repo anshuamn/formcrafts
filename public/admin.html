@@ -22,7 +22,7 @@
     </div>
     
     <div class="nav-actions" style="display:flex;align-items:center;gap:var(--space-3);">
-      <a href="/builder" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="gap:var(--space-2);">
+      <a href="/builder" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="gap:var(--space-2);" id="btn-new-form">
         <span>➕</span> New Form
       </a>
       <a href="#" id="preview-form-btn" class="btn btn-secondary btn-sm" style="display:none;gap:var(--space-2);">
@@ -45,6 +45,24 @@
         </div>
       </div>
     </div>
+
+    <script>
+      // Auto-attach token to New Form button
+      document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('btn-new-form');
+        if (btn) {
+          function updateNewFormLink() {
+            const token = getToken();
+            if (token) {
+              btn.href = '/builder?token=' + encodeURIComponent(token);
+            }
+          }
+          updateNewFormLink();
+          // Update on storage change (e.g., login in another tab)
+          window.addEventListener('storage', updateNewFormLink);
+        }
+      });
+    </script>
   </header>
 
   <!-- Main Layout -->
