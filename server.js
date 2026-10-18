@@ -23,8 +23,9 @@ const dataDir = path.join(__dirname, "data");
 const formsDir = path.join(dataDir, "forms");
 const responsesDir = path.join(dataDir, "responses");
 const importsDir = path.join(dataDir, "imports");
+const uploadsDir = path.join(dataDir, "uploads");
 
-[dataDir, formsDir, responsesDir, importsDir].forEach(dir => {
+[dataDir, formsDir, responsesDir, importsDir, uploadsDir].forEach(dir => {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
@@ -32,7 +33,7 @@ const importsDir = path.join(dataDir, "imports");
 const configFile = path.join(dataDir, "config.json");
 const defaultConfig = {
   appName: "FormCrafts",
-  theme: "dark",
+  theme: "light",
   adminPin: "admin123",
   brandTag: "Professional Form Builder",
   pageTitleSuffix: "| FormCrafts",
@@ -135,61 +136,14 @@ function saveResponse(formId, response) {
   return response;
 }
 
-// Admin Auth Middleware
-function requireAdminAuth(req, res, next) {
-  const cfg = loadConfig();
-  const providedPin = req.query.pin || req.headers["x-admin-pin"] || req.body?.pin;
-
-  if (req.path === "/admin" || req.path === "/admin/" || req.path === "/builder" || req.path === "/builder/") {
-    const pin = req.query.pin;
-    if (!pin || pin !== cfg.adminPin) {
-      return res.send(adminPinPage());
-    }
-  }
-
-  const publicApiPaths = [
-    "/api/forms", "/api/forms/", 
-    "/api/forms/:id/submit",
-    "/api/forms/:id/schema",
-    "/api/share/", "/api/import/",
-    "/api/schema", "/api/submit",
-    "/api/config", "/api/glossary",
-    "/api/whatsapp/", "/api/linkedin/", "/api/gmail/",
-    "/api/forms/:id/share/", "/api/forms/:id/embed"
-  ];
-
-  const isPublicApi = publicApiPaths.some(p => {
-    if (p.includes(":")) {
-      const regex = new RegExp("^" + p.replace(/:id/g, "[^/]+") + "$");
-      return regex.test(req.path);
-    }
-    return req.path.startsWith(p);
-  });
-
-  if (req.path.startsWith("/api/") && !isPublicApi) {
-    const pin = req.headers["x-admin-pin"] || req.query.pin || req.body?.pin;
-    if (!pin || pin !== cfg.adminPin) {
-      return res.status(401).json({ error: "Unauthorized: Admin PIN required" });
-    }
-  }
-
-  next();
-}
-
-function adminPinPage() {
-  return `
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Access Required</title>
-<style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}.container{background:rgba(30,41,59,0.9);padding:3rem;border-radius:16px;border:1px solid rgba(255,255,255,0.1);max-width:400px;width:90%;text-align:center}h1{color:#6366f1;margin-bottom:1rem}input{width:100%;padding:1rem;border:1px solid rgba(255,255,255,0.2);background:rgba(0,0,0,0.3);color:#f8fafc;border-radius:8px;font-size:1rem;margin-bottom:1rem;box-sizing:border-box}button{width:100%;padding:1rem;background:linear-gradient(135deg,#6366f1,#4f46e5);color:white;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer}button:hover{opacity:0.9}.error{color:#ef4444;margin-top:1rem;display:none}</style></head>
-<body><div class="container"><h1>🔐 Admin Access Required</h1><p>Enter your admin PIN to access the control panel.</p><form id="pinForm"><input type="password" id="pinInput" placeholder="Enter Admin PIN" autocomplete="off" required/><button type="submit">Access Admin Panel</button></form><div class="error" id="errorMsg">Invalid PIN. Please try again.</div></div><script>document.getElementById('pinForm').addEventListener('submit',(e)=>{e.preventDefault();const pin=document.getElementById('pinInput').value;window.location.href=req.path+'?pin='+encodeURIComponent(pin);});</script></body></html>`;
-}
-
 // Default form template
 function createDefaultForm() {
   return {
     id: uuidv4(),
     title: "New Form",
     description: "Enter your form description",
+    icon: "📝",
+    logo: null, // Base64 encoded logo
     settings: { ...loadConfig().defaultFormSettings },
     pages: [{
       id: uuidv4(),
@@ -205,6 +159,160 @@ function createDefaultForm() {
     published: false
   };
 }
+
+// ============ AUTH ROUTES ============
+
+// Simple token verification (in production use proper JWT)
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password, remember } = req.body;
+  
+  // Demo: accept any credentials
+  if (email && password) {
+    const token = 'fc_' + Buffer.from(JSON.stringify({ 
+      email, 
+      name: email.split('@')[0],
+      role: 'admin',
+      exp: Date.now() + (remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000)
+    })).toString('base64');
+    
+    res.json({ success: true, token, user: { email, name: email.split('@')[0] } });
+  } else {
+    res.status(400).json({ error: "Email and password required" });
+  }
+});
+
+app.post("/api/auth/verify", (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+  
+  const token = authHeader.substring(7);
+  try {
+    // Verify token format
+    if (token.startsWith('fc_')) {
+      const payload = JSON.parse(Buffer.from(token.substring(3), 'base64').toString());
+      if (payload.exp > Date.now()) {
+        return res.json({ success: true, user: { email: payload.email, name: payload.name } });
+      }
+    }
+    res.status(401).json({ error: "Invalid or expired token" });
+  } catch (e) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+app.post("/api/auth/logout", (req, res) => {
+  res.json({ success: true });
+});
+
+// Logo upload
+app.post("/api/upload/logo", (req, res) => {
+  // Handle base64 upload
+  const { logo, formId } = req.body;
+  
+  if (!logo || !formId) {
+    return res.status(400).json({ error: "Logo data and formId required" });
+  }
+  
+  // Validate base64 image
+  const matches = logo.match(/^data:image\/(png|jpeg|jpg|gif|svg\+xml);base64,(.+)$/);
+  if (!matches) {
+    return res.status(400).json({ error: "Invalid image format. Use PNG, JPEG, GIF, or SVG." });
+  }
+  
+  const ext = matches[1] === 'svg+xml' ? 'svg' : matches[1];
+  const base64Data = matches[2];
+  const buffer = Buffer.from(base64Data, 'base64');
+  
+  // Check size (max 500KB)
+  if (buffer.length > 500 * 1024) {
+    return res.status(400).json({ error: "Logo too large. Max 500KB." });
+  }
+  
+  const form = loadForm(formId);
+  if (!form) {
+    return res.status(404).json({ error: "Form not found" });
+  }
+  
+  // Save logo as base64 in form
+  form.logo = logo;
+  saveForm(form);
+  
+  res.json({ success: true, logo });
+});
+
+// Delete logo
+app.delete("/api/upload/logo/:formId", (req, res) => {
+  const form = loadForm(req.params.formId);
+  if (!form) return res.status(404).json({ error: "Form not found" });
+  
+  form.logo = null;
+  saveForm(form);
+  res.json({ success: true });
+});
+
+// ============ HTML ROUTES ============
+
+// Login page (default)
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+
+// Admin - protected
+function requireAuth(req, res, next) {
+  // Check for token in query (for page loads) or header (for API)
+  const token = req.query.token || req.headers.authorization?.replace('Bearer ', '');
+  
+  if (!token) {
+    // For HTML pages, redirect to login
+    if (req.accepts('html')) {
+      return res.redirect('/login?redirect=' + encodeURIComponent(req.originalUrl));
+    }
+    return res.status(401).json({ error: "Authentication required" });
+  }
+  
+  try {
+    if (token.startsWith('fc_')) {
+      const payload = JSON.parse(Buffer.from(token.substring(3), 'base64').toString());
+      if (payload.exp > Date.now()) {
+        req.user = payload;
+        return next();
+      }
+    }
+    throw new Error('Invalid token');
+  } catch (e) {
+    if (req.accepts('html')) {
+      return res.redirect('/login?redirect=' + encodeURIComponent(req.originalUrl));
+    }
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
+}
+
+// Protected HTML routes
+app.get("/admin", requireAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "admin.html"));
+});
+
+app.get("/builder", requireAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "builder.html"));
+});
+
+app.get("/builder/:id", requireAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "builder.html"));
+});
+
+// Public form route (no auth required)
+app.get("/form/:id", (req, res) => {
+  const form = loadForm(req.params.id);
+  if (!form) return res.status(404).send(formNotFoundPage());
+  if (!form.published) return res.status(403).send(formNotPublishedPage());
+  res.sendFile(path.join(__dirname, "public", "form.html"));
+});
 
 // ============ API ROUTES ============
 
@@ -337,11 +445,6 @@ app.post("/api/forms/:id/submit", async (req, res) => {
   };
 
   saveResponse(form.id, record);
-
-  // TODO: Forward to Google Forms if configured
-  // TODO: Send webhook notifications
-  // TODO: Send email notifications
-
   res.json({ success: true, responseId, timestamp, message: "Response submitted successfully!" });
 });
 
@@ -366,7 +469,6 @@ app.get("/api/forms/:id/responses/export", (req, res) => {
   const responses = loadResponses(req.params.id);
   if (responses.length === 0) return res.status(404).send("No responses yet.");
 
-  // Build field map
   const fieldMap = {};
   form.pages.forEach(page => {
     page.fields.forEach(f => { if (f.id) fieldMap[f.id] = f.label || f.title || f.id; });
@@ -406,13 +508,11 @@ app.get("/api/admin/stats", (req, res) => {
 
 // ============ IMPORT ROUTES ============
 
-// Google Forms Import
 app.post("/api/import/google", async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).json({ error: "Google Form URL required" });
 
   try {
-    // Extract form ID from URL
     const formIdMatch = url.match(/\/forms\/d\/e\/([^\/]+)/);
     if (!formIdMatch) return res.status(400).json({ error: "Invalid Google Form URL" });
     const formId = formIdMatch[1];
@@ -428,8 +528,6 @@ app.post("/api/import/google", async (req, res) => {
     try { formData = JSON.parse(fbMatch[1]); } catch (e) { return res.status(400).json({ error: "Failed to parse form JSON" }); }
 
     const schema = parseGoogleFormData(formData);
-    
-    // Cache for preview
     const cacheFile = path.join(importsDir, `google_${formId}.json`);
     fs.writeFileSync(cacheFile, JSON.stringify({ formId, url, schema, importedAt: new Date().toISOString() }, null, 2));
 
@@ -440,19 +538,13 @@ app.post("/api/import/google", async (req, res) => {
   }
 });
 
-// Microsoft Forms Import
 app.post("/api/import/microsoft", async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).json({ error: "Microsoft Forms URL required" });
 
   try {
-    // Microsoft Forms share URLs: https://forms.office.com/Pages/ResponsePage.aspx?id=...
-    // or short: https://forms.office.com/r/...
     const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
     const html = await response.text();
-    
-    // Microsoft Forms embeds data in various ways
-    // Try to find the form data in the page
     const schema = parseMicrosoftFormData(html, url);
     
     const cacheKey = `microsoft_${Date.now()}`;
@@ -489,7 +581,6 @@ app.post("/api/import/apply", (req, res) => {
     if (title) form.title = title;
     if (description) form.description = description;
 
-    // Convert imported schema to FormCraft format
     form.pages = schema.pages || [{
       id: uuidv4(),
       title: "Imported Form",
@@ -498,7 +589,7 @@ app.post("/api/import/apply", (req, res) => {
     }];
 
     saveForm(form);
-    fs.unlinkSync(cacheFile); // Clean up cache
+    fs.unlinkSync(cacheFile);
 
     res.json({ success: true, formId: form.id, message: "Form imported successfully!" });
   } catch (e) {
@@ -579,7 +670,6 @@ app.get("/api/forms/:id/embed", (req, res) => {
 
 // ============ RESPONDENT VIEW ROUTES ============
 
-// Serve respondent form
 app.get("/form/:id", (req, res) => {
   const form = loadForm(req.params.id);
   if (!form) return res.status(404).send(formNotFoundPage());
@@ -587,7 +677,6 @@ app.get("/form/:id", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "form.html"));
 });
 
-// Form schema for respondent view
 app.get("/api/forms/:id/respondent", (req, res) => {
   const form = loadForm(req.params.id);
   if (!form) return res.status(404).json({ error: "Form not found" });
@@ -608,23 +697,17 @@ app.get("/api/forms/:id/respondent", (req, res) => {
 // ============ HTML PAGES ============
 
 function formNotFoundPage() {
-  return `<!DOCTYPE html><html><head><title>Form Not Found</title><style>body{font-family:system-ui;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}.card{background:rgba(30,41,59,0.9);padding:3rem;border-radius:16px;border:1px solid rgba(255,255,255,0.1);text-align:center}h1{color:#ef4444}a{color:#6366f1}</style></head><body><div class="card"><h1>📋 Form Not Found</h1><p>The requested form does not exist or has been removed.</p><a href="/admin">← Back to Admin</a></div></body></html>`;
+  return `<!DOCTYPE html><html><head><title>Form Not Found</title><style>body{font-family:system-ui;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}.card{background:rgba(30,41,59,0.9);padding:3rem;border-radius:16px;border:1px solid rgba(255,255,255,0.1);text-align:center}h1{color:#ef4444}a{color:#6366f1}</style></head><body><div class="card"><h1>📋 Form Not Found</h1><p>The requested form does not exist or has been removed.</p><a href="/login">← Back to Login</a></div></body></html>`;
 }
 
 function formNotPublishedPage() {
-  return `<!DOCTYPE html><html><head><title>Form Not Available</title><style>body{font-family:system-ui;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}.card{background:rgba(30,41,59,0.9);padding:3rem;border-radius:16px;border:1px solid rgba(255,255,255,0.1);text-align:center}h1{color:#f59e0b}a{color:#6366f1}</style></head><body><div class="card"><h1>🔒 Form Not Published</h1><p>This form is not yet published. Please contact the form owner.</p><a href="/admin">← Back to Admin</a></div></body></html>`;
+  return `<!DOCTYPE html><html><head><title>Form Not Available</title><style>body{font-family:system-ui;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}.card{background:rgba(30,41,59,0.9);padding:3rem;border-radius:16px;border:1px solid rgba(255,255,255,0.1);text-align:center}h1{color:#f59e0b}a{color:#6366f1}</style></head><body><div class="card"><h1>🔒 Form Not Published</h1><p>This form is not yet published. Please contact the form owner.</p><a href="/login">← Back to Login</a></div></body></html>`;
 }
-
-// ============ STATIC ROUTES ============
-
-app.get("/admin", (req, res) => res.sendFile(path.join(__dirname, "public", "admin.html")));
-app.get("/builder", (req, res) => res.sendFile(path.join(__dirname, "public", "builder.html")));
-app.get("/builder/:id", (req, res) => res.sendFile(path.join(__dirname, "public", "builder.html")));
-app.get("/", (req, res) => res.redirect("/admin"));
 
 app.listen(PORT, () => {
   console.log(`=================================================`);
   console.log(`FormCrafts v2.0 running at:`);
+  console.log(`Login Page:       http://localhost:${PORT}/login`);
   console.log(`Admin Dashboard:  http://localhost:${PORT}/admin`);
   console.log(`Form Builder:     http://localhost:${PORT}/builder`);
   console.log(`Respondent Form:  http://localhost:${PORT}/form/:id`);
@@ -663,37 +746,29 @@ function parseGoogleFormData(data) {
       };
 
       if (questionType === 0) {
-        // Text input
         field.type = "text";
         field.placeholder = "Type your answer here...";
       } else if (questionType === 1) {
-        // Multiple choice (radio)
         field.type = "radio";
         field.options = (item[4] || []).map((opt, i) => ({ id: uuidv4(), label: opt[0], value: opt[0] }));
       } else if (questionType === 2) {
-        // Dropdown
         field.type = "select";
         field.options = (item[4] || []).map((opt, i) => ({ id: uuidv4(), label: opt[0], value: opt[0] }));
       } else if (questionType === 3) {
-        // Checkboxes
         field.type = "checkbox";
         field.options = (item[4] || []).map((opt, i) => ({ id: uuidv4(), label: opt[0], value: opt[0] }));
       } else if (questionType === 4) {
-        // Linear scale -> Likert
         field.type = "likert";
         field.statements = [{ id: uuidv4(), text: questionTitle, entryId }];
         field.scale = { min: 1, max: 5, labels: { 1: "Strongly Disagree", 5: "Strongly Agree" } };
       } else if (questionType === 5) {
-        // Grid -> Likert Matrix
         field.type = "likert_matrix";
         field.instruction = questionDesc;
         field.columns = ["1", "2", "3", "4", "5", "N/A"];
         field.statements = [{ id: uuidv4(), text: questionTitle, entryId }];
       } else if (questionType === 9) {
-        // Date
         field.type = "date";
       } else if (questionType === 10) {
-        // Time
         field.type = "time";
       } else {
         field.type = "text";
@@ -713,17 +788,13 @@ function parseGoogleFormData(data) {
 
 function parseMicrosoftFormData(html, url) {
   try {
-    // Microsoft Forms data is typically in a script tag or meta
-    // Try multiple patterns
     let formData = null;
     
-    // Pattern 1: window.__INITIAL_STATE__
     const stateMatch = html.match(/window\.__INITIAL_STATE__\s*=\s*({.+?});/s);
     if (stateMatch) {
       try { formData = JSON.parse(stateMatch[1]); } catch (e) {}
     }
 
-    // Pattern 2: data-form attribute
     if (!formData) {
       const dataMatch = html.match(/data-form\s*=\s*"([^"]+)"/);
       if (dataMatch) {
@@ -731,7 +802,6 @@ function parseMicrosoftFormData(html, url) {
       }
     }
 
-    // Pattern 3: Look for JSON in script tags
     if (!formData) {
       const scriptMatches = html.match(/<script[^>]*>([\s\S]*?)<\/script>/gi);
       if (scriptMatches) {
@@ -744,13 +814,10 @@ function parseMicrosoftFormData(html, url) {
       }
     }
 
-    // Fallback: create basic structure
     if (!formData) {
       return { title: "Microsoft Form Import", description: "Imported from Microsoft Forms", pages: [{ id: uuidv4(), title: "Page 1", description: "", fields: [] }] };
     }
 
-    // Parse Microsoft Forms structure
-    // This is a simplified parser - MS Forms structure varies
     const questions = formData.questions || formData.sections?.[0]?.questions || [];
     const title = formData.title || formData.name || "Imported Microsoft Form";
     const description = formData.description || "";

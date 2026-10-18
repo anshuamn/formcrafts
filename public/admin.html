@@ -25,7 +25,7 @@
       <a href="/builder" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="gap:var(--space-2);">
         <span>➕</span> New Form
       </a>
-      <a href="/form/new" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="display:none;" id="preview-form-btn">
+      <a href="#" id="preview-form-btn" class="btn btn-secondary btn-sm" style="display:none;gap:var(--space-2);">
         <span>👁️</span> Preview
       </a>
       <button class="btn btn-ghost btn-icon" id="theme-toggle" title="Toggle theme" style="width:36px;height:36px;border-radius:var(--radius-md);">
@@ -34,12 +34,12 @@
       <div class="dropdown" style="margin-left:var(--space-2);">
         <button class="btn btn-ghost" id="user-menu-btn" style="display:flex;align-items:center;gap:var(--space-2);padding:var(--space-1) var(--space-3);">
           <div class="avatar" id="user-avatar">FC</div>
-          <span style="font-weight:500;">Admin</span>
+          <span style="font-weight:500;" id="user-name">Admin</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:var(--space-1);"><path d="M6 9l6 6 6-6"/></svg>
         </button>
         <div class="dropdown-menu" id="user-dropdown" style="min-width:180px;">
-          <div class="dropdown-item" onclick="location.href='/admin?pin='+new URLSearchParams(window.location.search).get('pin')"><span>⚙️</span> Settings</div>
-          <div class="dropdown-item" onclick="location.href='/builder'"><span>🎨</span> Form Builder</div>
+          <div class="dropdown-item" onclick="location.href='/admin?token='+getToken()"><span>⚙️</span> Settings</div>
+          <div class="dropdown-item" onclick="location.href='/builder?token='+getToken()"><span>🎨</span> Form Builder</div>
           <div class="dropdown-divider"></div>
           <div class="dropdown-item danger" onclick="logout()"><span>🚪</span> Logout</div>
         </div>
@@ -54,12 +54,12 @@
       <nav class="sidebar-nav" style="flex:1;padding:var(--space-4);">
         <div class="nav-section" style="margin-bottom:var(--space-6);">
           <h3 class="nav-section-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:0 var(--space-3);margin-bottom:var(--space-2);">Forms</h3>
-          <a href="/admin" class="nav-item active" data-tab="forms" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
+          <a href="#" class="nav-item active" data-tab="forms" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
             <span style="font-size:1.1rem;">📋</span>
             <span>All Forms</span>
             <span class="badge badge-primary" id="forms-count" style="margin-left:auto;font-size:var(--text-xs);">0</span>
           </a>
-          <a href="#trash" class="nav-item" data-tab="trash" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
+          <a href="#" class="nav-item" data-tab="trash" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
             <span style="font-size:1.1rem;">🗑️</span>
             <span>Trash</span>
           </a>
@@ -67,12 +67,12 @@
         
         <div class="nav-section" style="margin-bottom:var(--space-6);">
           <h3 class="nav-section-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:0 var(--space-3);margin-bottom:var(--space-2);">Data</h3>
-          <a href="#responses" class="nav-item" data-tab="responses" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
+          <a href="#" class="nav-item" data-tab="responses" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
             <span style="font-size:1.1rem;">📊</span>
             <span>Responses</span>
             <span class="badge badge-success" id="responses-count" style="margin-left:auto;font-size:var(--text-xs);">0</span>
           </a>
-          <a href="#analytics" class="nav-item" data-tab="analytics" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
+          <a href="#" class="nav-item" data-tab="analytics" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
             <span style="font-size:1.1rem;">📈</span>
             <span>Analytics</span>
           </a>
@@ -80,11 +80,11 @@
 
         <div class="nav-section" style="margin-bottom:var(--space-6);">
           <h3 class="nav-section-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:0 var(--space-3);margin-bottom:var(--space-2);">Integrations</h3>
-          <a href="#import" class="nav-item" data-tab="import" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
+          <a href="#" class="nav-item" data-tab="import" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
             <span style="font-size:1.1rem;">📥</span>
             <span>Import Forms</span>
           </a>
-          <a href="#webhooks" class="nav-item" data-tab="webhooks" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
+          <a href="#" class="nav-item" data-tab="webhooks" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
             <span style="font-size:1.1rem;">🔗</span>
             <span>Webhooks</span>
           </a>
@@ -92,11 +92,11 @@
 
         <div class="nav-section" style="margin-bottom:var(--space-6);">
           <h3 class="nav-section-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:0 var(--space-3);margin-bottom:var(--space-2);">Sharing</h3>
-          <a href="#share" class="nav-item" data-tab="share" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
+          <a href="#" class="nav-item" data-tab="share" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
             <span style="font-size:1.1rem;">🔗</span>
             <span>Share Form</span>
           </a>
-          <a href="#embed" class="nav-item" data-tab="embed" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
+          <a href="#" class="nav-item" data-tab="embed" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
             <span style="font-size:1.1rem;">📱</span>
             <span>Embed Code</span>
           </a>
@@ -104,15 +104,15 @@
 
         <div class="nav-section">
           <h3 class="nav-section-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:0 var(--space-3);margin-bottom:var(--space-2);">Settings</h3>
-          <a href="#settings" class="nav-item" data-tab="settings" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
+          <a href="#" class="nav-item" data-tab="settings" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
             <span style="font-size:1.1rem;">⚙️</span>
             <span>General</span>
           </a>
-          <a href="#branding" class="nav-item" data-tab="branding" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
+          <a href="#" class="nav-item" data-tab="branding" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);margin-bottom:var(--space-1);">
             <span style="font-size:1.1rem;">🎨</span>
             <span>Branding</span>
           </a>
-          <a href="#glossary" class="nav-item" data-tab="glossary" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
+          <a href="#" class="nav-item" data-tab="glossary" style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border-radius:var(--radius-md);color:var(--color-text-secondary);font-weight:500;transition:all var(--transition-fast);">
             <span style="font-size:1.1rem;">📖</span>
             <span>Glossary</span>
           </a>
@@ -526,9 +526,9 @@ Sent via FormCrafts</textarea>
                 <input type="text" class="form-input" id="setting-app-name" value="FormCrafts">
               </div>
               <div class="form-group">
-                <label class="form-label" id="setting-admin-pin-label">Admin PIN</label>
+                <label class="form-label" id="setting-admin-pin-label">Admin PIN (Legacy)</label>
                 <input type="password" class="form-input" id="setting-admin-pin" value="admin123">
-                <p class="form-help">Used to access admin panel and builder</p>
+                <p class="form-help">Used for legacy PIN access</p>
               </div>
               <div class="form-group">
                 <label class="form-label" style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;">
@@ -692,7 +692,7 @@ Sent via FormCrafts</textarea>
     <div class="modal" style="max-width:400px;">
       <div class="modal-header">
         <h3 class="modal-title">Delete Form</h3>
-        <button class="modal-close" onclick="closeModal('delete-modal')">✕</button>
+        <button class="modal-close" onclick="app.closeModal('delete-modal')">✕</button>
       </div>
       <div class="modal-body">
         <p style="color:var(--color-text-secondary);">Are you sure you want to delete <strong id="delete-form-name"></strong>? This action cannot be undone.</p>
@@ -703,7 +703,7 @@ Sent via FormCrafts</textarea>
         </label>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('delete-modal')">Cancel</button>
+        <button class="btn btn-secondary" onclick="app.closeModal('delete-modal')">Cancel</button>
         <button class="btn btn-danger" id="confirm-delete"><span>🗑️</span> Delete</button>
       </div>
     </div>
@@ -714,7 +714,7 @@ Sent via FormCrafts</textarea>
     <div class="modal" style="max-width:500px;">
       <div class="modal-header">
         <h3 class="modal-title" id="glossary-modal-title">Add Glossary Term</h3>
-        <button class="modal-close" onclick="closeModal('glossary-modal')">✕</button>
+        <button class="modal-close" onclick="app.closeModal('glossary-modal')">✕</button>
       </div>
       <div class="modal-body">
         <form id="glossary-form">
@@ -734,7 +734,7 @@ Sent via FormCrafts</textarea>
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('glossary-modal')">Cancel</button>
+        <button class="btn btn-secondary" onclick="app.closeModal('glossary-modal')">Cancel</button>
         <button class="btn btn-primary" id="save-glossary-term"><span>💾</span> Save Term</button>
       </div>
     </div>
@@ -745,7 +745,7 @@ Sent via FormCrafts</textarea>
     <div class="modal" style="max-width:500px;">
       <div class="modal-header">
         <h3 class="modal-title" id="webhook-modal-title">Add Webhook</h3>
-        <button class="modal-close" onclick="closeModal('webhook-modal')">✕</button>
+        <button class="modal-close" onclick="app.closeModal('webhook-modal')">✕</button>
       </div>
       <div class="modal-body">
         <form id="webhook-form">
@@ -775,7 +775,7 @@ Sent via FormCrafts</textarea>
         </form>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('webhook-modal')">Cancel</button>
+        <button class="btn btn-secondary" onclick="app.closeModal('webhook-modal')">Cancel</button>
         <button class="btn btn-primary" id="save-webhook"><span>💾</span> Save Webhook</button>
       </div>
     </div>
@@ -784,6 +784,18 @@ Sent via FormCrafts</textarea>
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
+  <script>
+    // Token helper for navigation
+    function getToken() {
+      return sessionStorage.getItem('formcrafts_token') || localStorage.getItem('formcrafts_token') || '';
+    }
+    
+    function logout() {
+      sessionStorage.removeItem('formcrafts_token');
+      localStorage.removeItem('formcrafts_token');
+      window.location.href = '/login';
+    }
+  </script>
   <script type="module" src="js/admin.js"></script>
 </body>
 </html>
