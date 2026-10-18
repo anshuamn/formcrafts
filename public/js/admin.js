@@ -6,7 +6,9 @@ class AdminApp {
     this.currentFormId = null;
     this.glossary = [];
     this.webhooks = [];
-    this.init();
+    this.embedData = null;
+    this.importCacheKey = null;
+    this.importSource = null;
   }
 
   async init() {
@@ -21,12 +23,13 @@ class AdminApp {
 
   setupEventListeners() {
     // Theme toggle
-    document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
+    document.getElementById('theme-toggle')?.addEventListener('click', () => this.toggleTheme());
     
     // User dropdown
-    document.getElementById('user-menu-btn').addEventListener('click', (e) => {
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    userMenuBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
-      document.getElementById('user-dropdown').classList.toggle('open');
+      document.getElementById('user-dropdown')?.classList.toggle('open');
     });
     document.addEventListener('click', () => {
       document.getElementById('user-dropdown')?.classList.remove('open');
@@ -99,6 +102,14 @@ class AdminApp {
     // Delete modal
     document.getElementById('confirm-delete')?.addEventListener('click', () => this.confirmDelete());
 
+    // Preview form button
+    document.getElementById('preview-form-btn')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (this.currentFormId) {
+        window.open(`/form/${this.currentFormId}`, '_blank');
+      }
+    });
+
     // Initialize theme
     const savedTheme = localStorage.getItem('formcrafts_theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -120,7 +131,7 @@ class AdminApp {
       const btn = dropdown.querySelector('button');
       const menu = dropdown.querySelector('.dropdown-menu');
       
-      btn.addEventListener('click', (e) => {
+      btn?.addEventListener('click', (e) => {
         e.stopPropagation();
         document.querySelectorAll('.dropdown.open').forEach(d => {
           if (d !== dropdown) d.classList.remove('open');
@@ -128,7 +139,7 @@ class AdminApp {
         dropdown.classList.toggle('open');
       });
 
-      menu.querySelectorAll('.dropdown-item').forEach(item => {
+      menu?.querySelectorAll('.dropdown-item').forEach(item => {
         item.addEventListener('click', () => {
           dropdown.classList.remove('open');
         });
@@ -213,13 +224,13 @@ class AdminApp {
     const container = document.getElementById('forms-table-container');
 
     if (this.forms.length === 0) {
-      container.classList.add('hidden');
-      empty.classList.remove('hidden');
+      container?.classList.add('hidden');
+      empty?.classList.remove('hidden');
       return;
     }
 
-    container.classList.remove('hidden');
-    empty.classList.add('hidden');
+    container?.classList.remove('hidden');
+    empty?.classList.add('hidden');
 
     tbody.innerHTML = this.forms.map(form => `
       <tr data-form-id="${form.id}">
@@ -300,8 +311,8 @@ class AdminApp {
     const tbody = document.getElementById('responses-table-body');
 
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:var(--space-12);"><div class="spinner" style="margin:0 auto;"></div></td></tr>';
-    container.classList.remove('hidden');
-    empty.classList.add('hidden');
+    container?.classList.remove('hidden');
+    empty?.classList.add('hidden');
 
     try {
       let allResponses = [];
@@ -319,12 +330,12 @@ class AdminApp {
       this.responses = allResponses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
       if (this.responses.length === 0) {
-        container.classList.add('hidden');
-        empty.classList.remove('hidden');
+        container?.classList.add('hidden');
+        empty?.classList.remove('hidden');
         return;
       }
 
-      container.classList.remove('hidden');
+      container?.classList.remove('hidden');
       tbody.innerHTML = this.responses.map((r, idx) => `
         <tr>
           <td><input type="checkbox" class="form-checkbox" onchange="event.stopPropagation()"></td>
@@ -430,14 +441,12 @@ class AdminApp {
 
   // Form Actions
   openBuilder(formId) {
-    window.open(`/builder/${formId}`, '_blank');
+    const token = sessionStorage.getItem('formcrafts_token') || localStorage.getItem('formcrafts_token') || '';
+    window.open(`/builder/${formId}?token=${token}`, '_blank');
   }
 
   previewForm(formId) {
-    const form = this.forms.find(f => f.id === formId);
-    if (form) {
-      window.open(`/form/${formId}`, '_blank');
-    }
+    window.open(`/form/${formId}`, '_blank');
   }
 
   shareForm(formId) {
@@ -501,7 +510,6 @@ class AdminApp {
       });
       html += '</table></div>';
       
-      // Create a temporary modal for viewing
       this.showModal('Response Details', html, [
         { text: 'Close', class: 'btn-secondary', onclick: 'app.closeModal(\'view-response-modal\')' }
       ], 'view-response-modal');
@@ -664,14 +672,14 @@ class AdminApp {
     const form = this.forms.find(f => f.id === formId);
 
     if (!form) {
-      content.classList.add('hidden');
-      empty.classList.remove('hidden');
+      content?.classList.add('hidden');
+      empty?.classList.remove('hidden');
       return;
     }
 
     this.currentFormId = formId;
-    content.classList.remove('hidden');
-    empty.classList.add('hidden');
+    content?.classList.remove('hidden');
+    empty?.classList.add('hidden');
 
     const baseUrl = `${window.location.origin}/form/${formId}`;
     document.getElementById('share-direct-url').value = baseUrl;
@@ -730,9 +738,11 @@ class AdminApp {
 
   copyToClipboard(elementId) {
     const el = document.getElementById(elementId);
-    el.select();
-    document.execCommand('copy');
-    this.showToast('Copied to clipboard!', 'success');
+    if (el) {
+      el.select();
+      document.execCommand('copy');
+      this.showToast('Copied to clipboard!', 'success');
+    }
   }
 
   copyGmailText() {
@@ -752,14 +762,14 @@ class AdminApp {
     const empty = document.getElementById('embed-empty');
 
     if (!formId) {
-      content.classList.add('hidden');
-      empty.classList.remove('hidden');
+      content?.classList.add('hidden');
+      empty?.classList.remove('hidden');
       return;
     }
 
     this.currentFormId = formId;
-    content.classList.remove('hidden');
-    empty.classList.add('hidden');
+    content?.classList.remove('hidden');
+    empty?.classList.add('hidden');
 
     try {
       const res = await fetch(`/api/forms/${formId}/embed`);
@@ -780,8 +790,8 @@ class AdminApp {
   updateEmbedCode() {
     if (!this.embedData) return;
     
-    const responsive = document.getElementById('embed-responsive').checked;
-    const height = document.getElementById('embed-height').value;
+    const responsive = document.getElementById('embed-responsive')?.checked;
+    const height = document.getElementById('embed-height')?.value || 600;
     const activeTab = document.querySelector('#embed-tabs .tab.active')?.dataset.embedTab || 'iframe';
     
     let code = this.embedData.embedCodes[activeTab] || this.embedData.embedCodes.iframe;
@@ -898,7 +908,7 @@ class AdminApp {
     const title = document.getElementById('glossary-modal-title');
     const form = document.getElementById('glossary-form');
     
-    form.reset();
+    form?.reset();
     document.getElementById('glossary-term-id').value = '';
     
     if (term) {
@@ -931,13 +941,12 @@ class AdminApp {
     }
 
     const index = document.getElementById('glossary-term-id').value;
-    const action = index ? 'upsert' : 'upsert';
     
     try {
       await fetch('/api/glossary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, term, index: index ? parseInt(index) : undefined })
+        body: JSON.stringify({ action: 'upsert', term, index: index ? parseInt(index) : undefined })
       });
       this.showToast(index ? 'Term updated' : 'Term added', 'success');
       this.closeModal('glossary-modal');
@@ -965,7 +974,7 @@ class AdminApp {
   // Webhooks
   async loadWebhooks() {
     // Mock - would load from storage
-    this.webhooks = [];
+    this.webhooks = JSON.parse(localStorage.getItem('formcrafts_webhooks') || '[]');
     this.renderWebhooks();
   }
 
@@ -992,7 +1001,7 @@ class AdminApp {
     const title = document.getElementById('webhook-modal-title');
     const form = document.getElementById('webhook-form');
     
-    form.reset();
+    form?.reset();
     document.getElementById('webhook-id').value = '';
     
     if (webhook) {
@@ -1029,7 +1038,6 @@ class AdminApp {
     }
 
     const index = document.getElementById('webhook-id').value;
-    // Save to localStorage for now
     this.webhooks = JSON.parse(localStorage.getItem('formcrafts_webhooks') || '[]');
     if (index) {
       this.webhooks[index] = webhook;
@@ -1112,13 +1120,15 @@ class AdminApp {
   escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, c => ({'&': '&', '<': '<', '>': '>', '"': '"', "'": '''}[c]));
   }
-
-  logout() {
-    window.location.href = '/admin';
-  }
 }
 
-// Initialize
+// Initialize on DOM ready
+let app = null;
+
 document.addEventListener('DOMContentLoaded', () => {
-  window.app = new AdminApp();
+  app = new AdminApp();
+  app.init();
 });
+
+// Make app globally accessible
+window.app = app;
