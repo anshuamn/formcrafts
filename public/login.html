@@ -170,8 +170,14 @@
       });
 
       window.socialLogin = function(provider) {
+      if (provider === 'google') {
+        window.location.href = '/api/auth/google';
+      } else if (provider === 'microsoft') {
+        window.location.href = '/api/auth/microsoft';
+      } else {
         alert(provider.charAt(0).toUpperCase() + provider.slice(1) + ' login coming soon!');
-      };
+      }
+    };
       
       window.addEventListener('storage', function(e) {
         if (e.key === 'formcrafts_theme' && e.newValue) {

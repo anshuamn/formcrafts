@@ -216,6 +216,150 @@ app.post("/api/auth/logout", (req, res) => {
   res.json({ success: true });
 });
 
+// Google OAuth
+app.get("/api/auth/google", (req, res) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const redirectUri = `${req.protocol}://${req.get('host')}/api/auth/google/callback`;
+  const scope = 'openid email profile';
+  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline&prompt=consent`;
+  
+  if (!clientId) {
+    return res.status(500).json({ error: "Google OAuth not configured. Set GOOGLE_CLIENT_ID environment variable." });
+  }
+  
+  res.redirect(authUrl);
+});
+
+app.get("/api/auth/google/callback", async (req, res) => {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  const redirectUri = `${req.protocol}://${req.get('host')}/api/auth/google/callback`;
+  const code = req.query.code;
+  
+  if (!code) {
+    return res.redirect('/login?error=oauth_failed');
+  }
+  
+  if (!clientId || !clientSecret) {
+    return res.redirect('/login?error=oauth_not_configured');
+  }
+  
+  try {
+    // Exchange code for tokens
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code'
+      })
+    });
+    
+    const tokens = await tokenResponse.json();
+    
+    if (!tokens.access_token) {
+      return res.redirect('/login?error=oauth_failed');
+    }
+    
+    // Get user info
+    const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { 'Authorization': 'Bearer ' + tokens.access_token }
+    });
+    
+    const user = await userResponse.json();
+    
+    // Create our token
+    const token = 'fc_' + Buffer.from(JSON.stringify({ 
+      email: user.email,
+      name: user.name || user.email.split('@')[0],
+      role: 'admin',
+      exp: Date.now() + 30 * 24 * 60 * 60 * 1000,
+      provider: 'google'
+    })).toString('base64');
+    
+    // Redirect to admin with token
+    res.redirect(`/admin?token=${encodeURIComponent(token)}`);
+  } catch (e) {
+    console.error('Google OAuth error:', e);
+    res.redirect('/login?error=oauth_failed');
+  }
+});
+
+// Microsoft OAuth
+app.get("/api/auth/microsoft", (req, res) => {
+  const clientId = process.env.MICROSOFT_CLIENT_ID;
+  const redirectUri = `${req.protocol}://${req.get('host')}/api/auth/microsoft/callback`;
+  const scope = 'openid email profile';
+  const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&response_mode=query`;
+  
+  if (!clientId) {
+    return res.status(500).json({ error: "Microsoft OAuth not configured. Set MICROSOFT_CLIENT_ID environment variable." });
+  }
+  
+  res.redirect(authUrl);
+});
+
+app.get("/api/auth/microsoft/callback", async (req, res) => {
+  const clientId = process.env.MICROSOFT_CLIENT_ID;
+  const clientSecret = process.env.MICROSOFT_CLIENT_SECRET;
+  const redirectUri = `${req.protocol}://${req.get('host')}/api/auth/microsoft/callback`;
+  const code = req.query.code;
+  
+  if (!code) {
+    return res.redirect('/login?error=oauth_failed');
+  }
+  
+  if (!clientId || !clientSecret) {
+    return res.redirect('/login?error=oauth_not_configured');
+  }
+  
+  try {
+    // Exchange code for tokens
+    const tokenResponse = await fetch('https://login.microsoftonline.com/common/oauth2/v2.0/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code'
+      })
+    });
+    
+    const tokens = await tokenResponse.json();
+    
+    if (!tokens.access_token) {
+      return res.redirect('/login?error=oauth_failed');
+    }
+    
+    // Get user info from Microsoft Graph
+    const userResponse = await fetch('https://graph.microsoft.com/v1.0/me', {
+      headers: { 'Authorization': 'Bearer ' + tokens.access_token }
+    });
+    
+    const user = await userResponse.json();
+    
+    // Create our token
+    const token = 'fc_' + Buffer.from(JSON.stringify({ 
+      email: user.mail || user.userPrincipalName,
+      name: user.displayName || user.mail?.split('@')[0] || 'User',
+      role: 'admin',
+      exp: Date.now() + 30 * 24 * 60 * 60 * 1000,
+      provider: 'microsoft'
+    })).toString('base64');
+    
+    // Redirect to admin with token
+    res.redirect(`/admin?token=${encodeURIComponent(token)}`);
+  } catch (e) {
+    console.error('Microsoft OAuth error:', e);
+    res.redirect('/login?error=oauth_failed');
+  }
+});
+
 // Logo upload
 app.post("/api/upload/logo", (req, res) => {
   // Handle base64 upload

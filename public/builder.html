@@ -462,6 +462,18 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <script type="module" src="js/builder.js"></script>
+  <script src="js/builder.js"></script>
+  <script>
+    // Initialize theme from localStorage
+    var savedTheme = localStorage.getItem('formcrafts_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Sync theme changes across tabs
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'formcrafts_theme' && e.newValue) {
+        document.documentElement.setAttribute('data-theme', e.newValue);
+      }
+    });
+  </script>
 </body>
 </html>
