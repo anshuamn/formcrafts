@@ -1,15 +1,19 @@
 {
-  "name": "phd-formcrafts-ai",
-  "version": "1.0.0",
-  "description": "FormCrafts AI Form Agent with Google Forms integration and mobile Likert scales for PhD research",
+  "name": "formcrafts",
+  "version": "2.0.0",
+  "description": "FormCrafts - Professional Form Builder like JotForm with Google/Microsoft Forms import, WhatsApp/LinkedIn/Gmail sharing",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node --watch server.js"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "uuid": "^9.0.1",
+    "qrcode": "^1.5.3",
+    "cheerio": "^1.0.0-rc.12",
+    "axios": "^1.7.2"
   }
 }

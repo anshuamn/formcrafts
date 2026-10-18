@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Builder • FormCrafts</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/builder.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+</head>
+<body>
+  <!-- Top Toolbar -->
+  <header class="builder-toolbar" style="position:sticky;top:0;z-index:var(--z-sticky);height:var(--header-height);background:var(--color-bg);border-bottom:1px solid var(--color-border);display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-4);">
+    <div class="toolbar-left" style="display:flex;align-items:center;gap:var(--space-4);">
+      <a href="/admin" class="btn btn-ghost btn-icon" title="Back to Dashboard" style="width:36px;height:36px;border-radius:var(--radius-md);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <div class="form-title-editor" style="display:flex;align-items:center;gap:var(--space-2);">
+        <input type="text" id="form-title-input" class="form-input" style="border:none;background:transparent;padding:0;font-family:var(--font-heading);font-size:var(--text-xl);font-weight:700;color:var(--color-text);width:auto;min-width:200px;max-width:400px;" placeholder="Untitled Form">
+        <span class="badge badge-gray" id="form-status-badge">Draft</span>
+      </div>
+    </div>
+
+    <div class="toolbar-center" style="display:flex;align-items:center;gap:var(--space-2);flex:1;justify-content:center;">
+      <button class="btn btn-secondary btn-sm" id="btn-undo" title="Undo (Ctrl+Z)" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6M3 13a9 9 0 1 0 2.716-6.368"/></svg></button>
+      <button class="btn btn-secondary btn-sm" id="btn-redo" title="Redo (Ctrl+Shift+Z)" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6M21 13a9 9 0 1 1-2.716-6.368"/></svg></button>
+      <div style="width:1px;height:24px;background:var(--color-border);margin:0 var(--space-2);"></div>
+      <button class="btn btn-secondary btn-sm" id="btn-preview" title="Preview Form (Ctrl+P)"><span>👁️</span> Preview</button>
+    </div>
+
+    <div class="toolbar-right" style="display:flex;align-items:center;gap:var(--space-3);">
+      <button class="btn btn-ghost btn-sm" id="btn-settings" title="Form Settings"><span>⚙️</span> Settings</button>
+      <button class="btn btn-secondary" id="btn-save-draft"><span>💾</span> Save Draft</button>
+      <button class="btn btn-primary" id="btn-publish"><span>🚀</span> Publish</button>
+    </div>
+  </header>
+
+  <!-- Main Builder Layout -->
+  <div class="builder-layout" style="display:flex;flex:1;overflow:hidden;">
+    <!-- Left Sidebar - Field Palette -->
+    <aside class="builder-sidebar builder-sidebar-left" style="width:var(--sidebar-width);background:var(--color-bg-secondary);border-right:1px solid var(--color-border);display:flex;flex-direction:column;overflow-y:auto;">
+      <div class="sidebar-header" style="padding:var(--space-4);border-bottom:1px solid var(--color-border);">
+        <h3 style="font-family:var(--font-heading);font-size:var(--text-lg);font-weight:600;display:flex;align-items:center;gap:var(--space-2);"><span>🧩</span> Add Fields</h3>
+        <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-1);">Drag fields to the canvas</p>
+      </div>
+      
+      <div class="field-categories" style="flex:1;padding:var(--space-4);overflow-y:auto;">
+        <!-- Basic Fields -->
+        <div class="field-category">
+          <h4 class="category-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-2);">Basic</h4>
+          <div class="field-palette" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <button class="field-palette-item" draggable="true" data-field-type="text" title="Short Text"><span class="field-icon">📝</span><span class="field-name">Short Text</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="textarea" title="Long Text"><span class="field-icon">📄</span><span class="field-name">Long Text</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="email" title="Email"><span class="field-icon">📧</span><span class="field-name">Email</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="number" title="Number"><span class="field-icon">🔢</span><span class="field-name">Number</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="phone" title="Phone"><span class="field-icon">📞</span><span class="field-name">Phone</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="url" title="URL"><span class="field-icon">🔗</span><span class="field-name">URL</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="date" title="Date"><span class="field-icon">📅</span><span class="field-name">Date</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="time" title="Time"><span class="field-icon">🕐</span><span class="field-name">Time</span></button>
+          </div>
+        </div>
+
+        <!-- Choice Fields -->
+        <div class="field-category">
+          <h4 class="category-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-2);margin-top:var(--space-4);">Choice</h4>
+          <div class="field-palette" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <button class="field-palette-item" draggable="true" data-field-type="radio" title="Single Choice"><span class="field-icon">⭕</span><span class="field-name">Single Choice</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="checkbox" title="Multiple Choice"><span class="field-icon">☑️</span><span class="field-name">Multiple Choice</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="select" title="Dropdown"><span class="field-icon">📋</span><span class="field-name">Dropdown</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="yesno" title="Yes/No"><span class="field-icon">✅</span><span class="field-name">Yes / No</span></button>
+          </div>
+        </div>
+
+        <!-- Advanced Fields -->
+        <div class="field-category">
+          <h4 class="category-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-2);margin-top:var(--space-4);">Advanced</h4>
+          <div class="field-palette" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <button class="field-palette-item" draggable="true" data-field-type="likert" title="Likert Scale"><span class="field-icon">📊</span><span class="field-name">Likert Scale</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="likert_matrix" title="Likert Matrix"><span class="field-icon">📈</span><span class="field-name">Likert Matrix</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="rating" title="Star Rating"><span class="field-icon">⭐</span><span class="field-name">Star Rating</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="scale" title="Scale (1-10)"><span class="field-icon">📏</span><span class="field-name">Scale</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="file" title="File Upload"><span class="field-icon">📎</span><span class="field-name">File Upload</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="signature" title="Signature"><span class="field-icon">✍️</span><span class="field-name">Signature</span></button>
+          </div>
+        </div>
+
+        <!-- Layout Fields -->
+        <div class="field-category">
+          <h4 class="category-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-2);margin-top:var(--space-4);">Layout</h4>
+          <div class="field-palette" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <button class="field-palette-item" draggable="true" data-field-type="section" title="Section Header"><span class="field-icon">📌</span><span class="field-name">Section Header</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="page_break" title="Page Break"><span class="field-icon">➡️</span><span class="field-name">Page Break</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="html" title="HTML/Markdown"><span class="field-icon">🌐</span><span class="field-name">HTML Content</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="divider" title="Divider"><span class="field-icon">➖</span><span class="field-name">Divider</span></button>
+          </div>
+        </div>
+
+        <!-- Special Fields -->
+        <div class="field-category">
+          <h4 class="category-title" style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);padding:var(--space-2) var(--space-3);margin-bottom:var(--space-2);margin-top:var(--space-4);">Special</h4>
+          <div class="field-palette" style="display:flex;flex-direction:column;gap:var(--space-2);">
+            <button class="field-palette-item" draggable="true" data-field-type="consent" title="Consent"><span class="field-icon">📜</span><span class="field-name">Consent</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="name" title="Name Field"><span class="field-icon">👤</span><span class="field-name">Name (First/Last)</span></button>
+            <button class="field-palette-item" draggable="true" data-field-type="address" title="Address"><span class="field-icon">🏠</span><span class="field-name">Address</span></button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center Canvas - Form Preview/Editor -->
+    <main class="builder-canvas" style="flex:1;min-width:var(--canvas-min-width);background:var(--color-bg-tertiary);display:flex;flex-direction:column;overflow:hidden;position:relative;">
+      <!-- Canvas Header -->
+      <div class="canvas-header" style="padding:var(--space-4);border-bottom:1px solid var(--color-border);background:var(--color-bg);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);">
+        <div class="canvas-nav" style="display:flex;align-items:center;gap:var(--space-2);">
+          <button class="btn btn-ghost btn-sm" id="btn-add-page" title="Add Page"><span>➕</span> Add Page</button>
+          <div class="page-tabs" id="page-tabs" style="display:flex;gap:var(--space-1);background:var(--color-bg-secondary);padding:var(--space-1);border-radius:var(--radius-md);min-width:200px;">
+            <!-- Page tabs rendered here -->
+          </div>
+        </div>
+        <div class="canvas-actions" style="display:flex;align-items:center;gap:var(--space-2);">
+          <label class="switch" title="Show field labels"><input type="checkbox" id="toggle-field-labels" checked><span class="switch-slider"></span><span class="switch-label" style="font-size:var(--text-xs);">Labels</span></label>
+          <label class="switch" title="Show required indicators"><input type="checkbox" id="toggle-required" checked><span class="switch-slider"></span><span class="switch-label" style="font-size:var(--text-xs);">Required</span></label>
+          <div class="dropdown">
+            <button class="btn btn-secondary btn-sm" id="device-toggle" style="display:flex;align-items:center;gap:var(--space-1);"><span id="device-icon">💻</span> <span id="device-text">Desktop</span></button>
+            <div class="dropdown-menu" style="min-width:160px;">
+              <div class="dropdown-item" data-device="desktop"><span>💻</span> Desktop</div>
+              <div class="dropdown-item" data-device="tablet"><span>📱</span> Tablet</div>
+              <div class="dropdown-item" data-device="mobile"><span>📱</span> Mobile</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Canvas -->
+      <div class="form-canvas-wrapper" style="flex:1;overflow:auto;padding:var(--space-8);display:flex;justify-content:center;align-items:flex-start;position:relative;">
+        <!-- Device Frame -->
+        <div class="device-frame" id="device-frame" style="background:white;border-radius:var(--radius-xl);box-shadow:var(--shadow-xl);width:100%;max-width:720px;min-height:500px;transition:all var(--transition-base);position:relative;">
+          <!-- Desktop -->
+          <div class="device-screen" id="device-desktop" style="width:100%;padding:var(--space-8);">
+            <div class="form-preview" id="form-preview" style="max-width:100%;">
+              <!-- Form header -->
+              <div class="form-header" id="form-header" style="margin-bottom:var(--space-8);text-align:center;padding-bottom:var(--space-6);border-bottom:1px solid var(--color-border);">
+                <div class="form-header-icon" id="form-header-icon" style="width:64px;height:64px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--color-primary),#8b5cf6);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-4);font-size:1.5rem;">📝</div>
+                <h1 class="form-header-title" id="form-header-title" style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--color-text);margin-bottom:var(--space-2);">Untitled Form</h1>
+                <p class="form-header-desc" id="form-header-desc" style="color:var(--color-text-muted);max-width:600px;margin:0 auto;"></p>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="form-progress" id="form-progress" style="margin-bottom:var(--space-6);display:none;">
+                <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-1);">
+                  <span id="progress-text">Page 1 of 1</span>
+                  <span id="progress-percent">0%</span>
+                </div>
+                <div style="height:4px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;">
+                  <div id="progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--color-primary),#8b5cf6);border-radius:var(--radius-full);transition:width var(--transition-base);"></div>
+                </div>
+              </div>
+
+              <!-- Pages Container -->
+              <div class="form-pages" id="form-pages">
+                <!-- Pages rendered here -->
+              </div>
+
+              <!-- Form Footer -->
+              <div class="form-footer" style="margin-top:var(--space-8);padding-top:var(--space-6);border-top:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);">
+                <div class="form-powered" style="font-size:var(--text-xs);color:var(--color-text-muted);">Powered by <a href="#" style="color:var(--color-primary);">FormCrafts</a></div>
+                <div class="form-nav" style="display:flex;gap:var(--space-3);">
+                  <button class="btn btn-secondary" id="form-prev-btn" style="display:none;"><span>←</span> Previous</button>
+                  <button class="btn btn-primary" id="form-next-btn"><span>Next</span> <span>→</span></button>
+                  <button class="btn btn-primary" id="form-submit-btn" style="display:none;"><span>✓</span> Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tablet -->
+          <div class="device-screen hidden" id="device-tablet" style="width:100%;max-width:768px;margin:0 auto;padding:var(--space-6);border-radius:var(--radius-xl);background:white;box-shadow:var(--shadow-lg);">
+            <div class="form-preview" id="form-preview-tablet"></div>
+          </div>
+
+          <!-- Mobile -->
+          <div class="device-screen hidden" id="device-mobile" style="width:100%;max-width:375px;margin:0 auto;padding:var(--space-4);border-radius:var(--radius-xl);background:white;box-shadow:var(--shadow-lg);">
+            <div class="form-preview" id="form-preview-mobile"></div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="canvas-empty" id="canvas-empty" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:10;">
+          <div style="font-size:4rem;margin-bottom:var(--space-4);opacity:0.3;">📋</div>
+          <h3 style="font-family:var(--font-heading);font-size:var(--text-2xl);font-weight:600;color:var(--color-text-muted);margin-bottom:var(--space-2);">Empty Form</h3>
+          <p style="color:var(--color-text-muted);margin-bottom:var(--space-6);max-width:300px;">Drag fields from the left panel or click to add your first field</p>
+          <button class="btn btn-primary" id="add-first-field" style="pointer-events:auto;"><span>➕</span> Add Field</button>
+        </div>
+
+        <!-- Drop Zone Indicator -->
+        <div class="drop-zone-indicator hidden" id="drop-zone-indicator" style="position:absolute;left:0;right:0;height:3px;background:var(--color-primary);border-radius:var(--radius-full);box-shadow:0 0 0 4px var(--color-primary-light);pointer-events:none;z-index:100;transform:translateY(-50%);"></div>
+      </div>
+    </main>
+
+    <!-- Right Sidebar - Field Properties -->
+    <aside class="builder-sidebar builder-sidebar-right" style="width:var(--properties-width);background:var(--color-bg-secondary);border-left:1px solid var(--color-border);display:flex;flex-direction:column;overflow-y:auto;">
+      <div class="sidebar-header" style="padding:var(--space-4);border-bottom:1px solid var(--color-border);display:flex;align-items:center;justify-content:space-between;">
+        <h3 style="font-family:var(--font-heading);font-size:var(--text-lg);font-weight:600;display:flex;align-items:center;gap:var(--space-2);"><span>⚙️</span> Properties</h3>
+        <button class="btn btn-ghost btn-sm btn-icon" id="close-properties" title="Close Properties" style="display:none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+
+      <div class="properties-content" id="properties-content" style="flex:1;padding:var(--space-4);overflow-y:auto;">
+        <!-- No Selection -->
+        <div class="properties-empty" id="properties-empty" style="text-align:center;padding:var(--space-12);">
+          <div style="font-size:3rem;margin-bottom:var(--space-4);opacity:0.3;">⚙️</div>
+          <h3 style="font-family:var(--font-heading);font-size:var(--text-xl);font-weight:600;color:var(--color-text-muted);margin-bottom:var(--space-2);">No Field Selected</h3>
+          <p style="color:var(--color-text-muted);">Click a field on the canvas or add a new field to edit its properties</p>
+        </div>
+
+        <!-- Field Properties Panels (dynamically shown) -->
+        <div class="field-properties hidden" id="field-properties-common">
+          <div class="property-section">
+            <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);display:flex;align-items:center;gap:var(--space-2);"><span id="property-field-icon"></span><span id="property-field-type"></span></h4>
+            
+            <div class="form-group">
+              <label class="form-label" for="prop-label">Label *</label>
+              <input type="text" class="form-input" id="prop-label" placeholder="Field label">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prop-placeholder">Placeholder</label>
+              <input type="text" class="form-input" id="prop-placeholder" placeholder="Placeholder text">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prop-help">Help Text</label>
+              <textarea class="form-textarea" id="prop-help" rows="2" placeholder="Help text shown below field"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;">
+                <input type="checkbox" class="form-checkbox" id="prop-required">
+                <span>Required</span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;">
+                <input type="checkbox" class="form-checkbox" id="prop-hidden">
+                <span>Hidden (for calculations)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Validation -->
+          <div class="property-section" style="margin-top:var(--space-6);">
+            <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);">Validation</h4>
+            <div class="form-group">
+              <label class="form-label" for="prop-validation">Validation Type</label>
+              <select class="form-select" id="prop-validation">
+                <option value="none">None</option>
+                <option value="email">Email</option>
+                <option value="url">URL</option>
+                <option value="number">Number</option>
+                <option value="min_length">Min Length</option>
+                <option value="max_length">Max Length</option>
+                <option value="pattern">Custom Regex</option>
+              </select>
+            </div>
+            <div class="form-group hidden" id="prop-validation-value-group">
+              <label class="form-label" for="prop-validation-value">Value</label>
+              <input type="text" class="form-input" id="prop-validation-value" placeholder="Validation parameter">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prop-error-message">Error Message</label>
+              <input type="text" class="form-input" id="prop-error-message" placeholder="Custom error message">
+            </div>
+          </div>
+
+          <!-- Options (for choice fields) -->
+          <div class="property-section hidden" id="prop-options-section" style="margin-top:var(--space-6);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);">
+              <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);">Options</h4>
+              <button class="btn btn-ghost btn-sm" id="add-option-btn"><span>➕</span> Add Option</button>
+            </div>
+            <div id="options-list" style="display:flex;flex-direction:column;gap:var(--space-2);max-height:200px;overflow-y:auto;"></div>
+            <div class="form-group">
+              <label class="form-label" style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;">
+                <input type="checkbox" class="form-checkbox" id="prop-other-option">
+                <span>Add "Other" option</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Likert Matrix Options -->
+          <div class="property-section hidden" id="prop-likert-section" style="margin-top:var(--space-6);">
+            <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);">Scale Labels</h4>
+            <div id="likert-labels" style="display:flex;flex-direction:column;gap:var(--space-2);"></div>
+            <div style="margin-top:var(--space-3);">
+              <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);">Statements/Rows</h4>
+              <div id="likert-statements" style="display:flex;flex-direction:column;gap:var(--space-2);max-height:200px;overflow-y:auto;"></div>
+              <button class="btn btn-ghost btn-sm" id="add-statement-btn"><span>➕</span> Add Statement</button>
+            </div>
+          </div>
+
+          <!-- Conditional Logic -->
+          <div class="property-section" style="margin-top:var(--space-6);">
+            <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);display:flex;align-items:center;justify-content:space-between;">
+              Conditional Logic
+              <button class="btn btn-ghost btn-sm" id="add-logic-btn"><span>➕</span> Add Rule</button>
+            </h4>
+            <div id="logic-rules" style="display:flex;flex-direction:column;gap:var(--space-2);"></div>
+          </div>
+
+          <!-- Advanced -->
+          <div class="property-section" style="margin-top:var(--space-6);">
+            <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);">Advanced</h4>
+            <div class="form-group">
+              <label class="form-label" for="prop-default-value">Default Value</label>
+              <input type="text" class="form-input" id="prop-default-value" placeholder="Default value">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prop-field-id">Field ID</label>
+              <input type="text" class="form-input" id="prop-field-id" readonly style="background:var(--color-bg-tertiary);font-family:var(--font-mono);font-size:var(--text-xs);">
+              <p class="form-help">Unique identifier - auto-generated</p>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="property-actions" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--color-border);display:flex;gap:var(--space-2);">
+            <button class="btn btn-secondary" id="duplicate-field-btn" style="flex:1;"><span>📋</span> Duplicate</button>
+            <button class="btn btn-danger" id="delete-field-btn" style="flex:1;"><span>🗑️</span> Delete</button>
+          </div>
+        </div>
+
+        <!-- Page Properties -->
+        <div class="field-properties hidden" id="page-properties">
+          <div class="property-section">
+            <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);display:flex;align-items:center;gap:var(--space-2);"><span>📄</span> Page Settings</h4>
+            <div class="form-group">
+              <label class="form-label" for="page-prop-title">Page Title</label>
+              <input type="text" class="form-input" id="page-prop-title" placeholder="Page title">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="page-prop-desc">Page Description</label>
+              <textarea class="form-textarea" id="page-prop-desc" rows="2" placeholder="Page description (optional)"></textarea>
+            </div>
+          </div>
+          <div class="property-actions" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--color-border);display:flex;gap:var(--space-2);">
+            <button class="btn btn-danger" id="delete-page-btn" style="flex:1;"><span>🗑️</span> Delete Page</button>
+          </div>
+        </div>
+
+        <!-- Form Settings Properties -->
+        <div class="field-properties hidden" id="form-settings-properties">
+          <div class="property-section">
+            <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);display:flex;align-items:center;gap:var(--space-2);"><span>📝</span> Form Settings</h4>
+            <div class="form-group">
+              <label class="form-label" for="form-prop-title">Form Title</label>
+              <input type="text" class="form-input" id="form-prop-title" placeholder="Form title">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="form-prop-desc">Form Description</label>
+              <textarea class="form-textarea" id="form-prop-desc" rows="3" placeholder="Form description"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="form-prop-icon">Header Icon</label>
+              <input type="text" class="form-input" id="form-prop-icon" placeholder="📝" style="width:auto;max-width:80px;font-size:1.5rem;">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="form-prop-theme">Theme</label>
+              <select class="form-select" id="form-prop-theme">
+                <option value="default">Default</option>
+                <option value="minimal">Minimal</option>
+                <option value="card">Card Style</option>
+                <option value="conversational">Conversational</option>
+              </select>
+            </div>
+          </div>
+          <div class="property-section" style="margin-top:var(--space-6);">
+            <h4 style="font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-muted);margin-bottom:var(--space-3);">Behavior</h4>
+            <label class="switch"><input type="checkbox" id="form-prop-progress" checked><span class="switch-slider"></span><span class="switch-label">Show Progress Bar</span></label>
+            <label class="switch" style="margin-top:var(--space-2);"><input type="checkbox" id="form-prop-email"><span class="switch-slider"></span><span class="switch-label">Collect Email</span></label>
+            <label class="switch" style="margin-top:var(--space-2);"><input type="checkbox" id="form-prop-multiple"><span class="switch-slider"></span><span class="switch-label">Allow Multiple Submissions</span></label>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Modals -->
+  <!-- Preview Modal -->
+  <div class="modal-overlay" id="preview-modal">
+    <div class="modal" style="max-width:90vw;width:800px;max-height:90vh;">
+      <div class="modal-header">
+        <h3 class="modal-title">Form Preview</h3>
+        <button class="modal-close" onclick="closeModal('preview-modal')">✕</button>
+      </div>
+      <div class="modal-body" style="padding:0;max-height:calc(90vh - 120px);">
+        <iframe id="preview-iframe" src="" style="width:100%;height:100%;border:none;border-radius:0;"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('preview-modal')">Close</button>
+        <a href="#" class="btn btn-primary" id="preview-open-new" target="_blank" rel="noopener"><span>🔗</span> Open in New Tab</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Settings Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal" style="max-width:600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Form Settings</h3>
+        <button class="modal-close" onclick="closeModal('settings-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="tabs" id="settings-tabs">
+          <button class="tab active" data-settings-tab="general">General</button>
+          <button class="tab" data-settings-tab="presentation">Presentation</button>
+          <button class="tab" data-settings-tab="notifications">Notifications</button>
+        </div>
+        <div id="settings-general" class="tab-panel">
+          <div class="form-group"><label class="form-label" for="set-title">Form Title</label><input type="text" class="form-input" id="set-title"></div>
+          <div class="form-group"><label class="form-label" for="set-desc">Description</label><textarea class="form-textarea" id="set-desc" rows="3"></textarea></div>
+          <div class="form-group"><label class="form-label" for="set-confirmation">Confirmation Message</label><textarea class="form-textarea" id="set-confirmation" rows="2"></textarea></div>
+          <div class="form-group"><label class="form-label" for="set-redirect">Redirect URL</label><input type="url" class="form-input" id="set-redirect" placeholder="https://example.com/thank-you"></div>
+          <label class="switch" style="margin-top:var(--space-3);"><input type="checkbox" id="set-progress" checked><span class="switch-slider"></span><span class="switch-label">Show Progress Bar</span></label>
+          <label class="switch" style="margin-top:var(--space-2);"><input type="checkbox" id="set-email"><span class="switch-slider"></span><span class="switch-label">Collect Email Addresses</span></label>
+          <label class="switch" style="margin-top:var(--space-2);"><input type="checkbox" id="set-multiple"><span class="switch-slider"></span><span class="switch-label">Allow Multiple Submissions</span></label>
+        </div>
+        <div id="settings-presentation" class="tab-panel hidden">
+          <div class="form-group"><label class="form-label" for="set-theme">Theme</label><select class="form-select" id="set-theme"><option value="default">Default</option><option value="minimal">Minimal</option><option value="card">Card Style</option><option value="conversational">Conversational</option></select></div>
+          <div class="form-group"><label class="form-label" for="set-font">Font</label><select class="form-select" id="set-font"><option value="inter">Inter</option><option value="system">System</option><option value="serif">Serif</option></select></div>
+          <div class="form-group"><label class="form-label" for="set-primary-color">Primary Color</label><div style="display:flex;gap:var(--space-2);"><input type="color" id="set-primary-color" value="#3b82f6" style="width:50px;height:50px;"><input type="text" class="form-input" id="set-primary-hex" value="#3b82f6"></div></div>
+        </div>
+        <div id="settings-notifications" class="tab-panel hidden">
+          <div class="form-group"><label class="form-label" for="set-notify-email">Notification Email</label><input type="email" class="form-input" id="set-notify-email" placeholder="admin@example.com"></div>
+          <label class="switch" style="margin-top:var(--space-3);"><input type="checkbox" id="set-notify-new"><span class="switch-slider"></span><span class="switch-label">Notify on new response</span></label>
+          <label class="switch" style="margin-top:var(--space-2);"><input type="checkbox" id="set-autoresponder"><span class="switch-slider"></span><span class="switch-label">Send auto-responder to respondent</span></label>
+          <div class="form-group" style="margin-top:var(--space-3);"><label class="form-label" for="set-auto-subject">Auto-responder Subject</label><input type="text" class="form-input" id="set-auto-subject" value="Thanks for your submission!"></div>
+          <div class="form-group"><label class="form-label" for="set-auto-body">Auto-responder Body</label><textarea class="form-textarea" id="set-auto-body" rows="4">Hi {{name}},\n\nThank you for submitting {{form_title}}.\n\nWe'll get back to you soon.\n\n— The Team</textarea></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('settings-modal')">Cancel</button>
+        <button class="btn btn-primary" id="save-form-settings"><span>💾</span> Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module" src="js/builder.js"></script>
+</body>
+</html>

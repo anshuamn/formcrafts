@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FormCrafts - Professional Form Builder">
+  <title id="page-title">Loading...</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/form.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+</head>
+<body>
+  <!-- Progress Bar -->
+  <div class="form-progress-bar" id="form-progress-bar" style="display:none;">
+    <div class="progress-track" style="height:3px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;">
+      <div class="progress-fill" id="progress-fill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--color-primary),#8b5cf6);border-radius:var(--radius-full);transition:width var(--transition-base);"></div>
+    </div>
+    <div class="progress-labels" style="display:flex;justify-content:space-between;font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-1);">
+      <span id="progress-current">Page 1</span>
+      <span id="progress-percent">0%</span>
+      <span id="progress-total">of 1</span>
+    </div>
+  </div>
+
+  <!-- Main Form Container -->
+  <main class="form-main" style="min-height:100vh;display:flex;flex-direction:column;">
+    <!-- Header -->
+    <header class="form-header-bar" style="position:sticky;top:0;z-index:var(--z-sticky);background:var(--color-bg);border-bottom:1px solid var(--color-border);padding:var(--space-4) var(--space-6);">
+      <div style="max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);">
+        <div class="form-brand" style="display:flex;align-items:center;gap:var(--space-3);">
+          <div class="brand-icon" id="form-brand-icon" style="width:40px;height:40px;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--color-primary),#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-size:1.25rem;">📝</div>
+          <div>
+            <h1 id="form-brand-title" style="font-family:var(--font-heading);font-size:var(--text-lg);font-weight:700;color:var(--color-text);">FormCrafts</h1>
+            <div class="brand-tag" id="form-brand-tag" style="font-size:var(--text-xs);color:var(--color-text-muted);display:flex;align-items:center;gap:var(--space-1);"><span class="badge-live" style="width:6px;height:6px;background:var(--color-success);border-radius:50%;"></span><span>Professional Form Builder</span></div>
+          </div>
+        </div>
+        <div class="form-progress-mini" id="form-progress-mini" style="display:none;align-items:center;gap:var(--space-2);min-width:150px;">
+          <div style="width:80px;height:4px;background:var(--color-border-light);border-radius:var(--radius-full);overflow:hidden;"><div id="progress-mini-fill" style="height:100%;width:0%;background:var(--color-primary);border-radius:var(--radius-full);transition:width var(--transition-base);"></div></div>
+          <span id="progress-mini-text" style="font-size:var(--text-xs);color:var(--color-text-muted);white-space:nowrap;">1 of 1</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Form Content -->
+    <div class="form-container" style="flex:1;display:flex;justify-content:center;padding:var(--space-8) var(--space-4);">
+      <div class="form-card" style="width:100%;max-width:720px;background:var(--color-bg-card);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);overflow:hidden;">
+        <!-- Form Header -->
+        <header class="form-header-section" id="form-header-section" style="padding:var(--space-8);text-align:center;border-bottom:1px solid var(--color-border);">
+          <div class="form-header-icon" id="form-header-icon" style="width:72px;height:72px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--color-primary),#8b5cf6);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-4);font-size:1.75rem;">📝</div>
+          <h1 class="form-header-title" id="form-header-title" style="font-family:var(--font-heading);font-size:var(--text-3xl);font-weight:700;color:var(--color-text);margin-bottom:var(--space-2);">Loading...</h1>
+          <p class="form-header-desc" id="form-header-desc" style="color:var(--color-text-muted);max-width:600px;margin:0 auto;line-height:1.7;"></p>
+        </header>
+
+        <!-- Form Pages -->
+        <div class="form-pages" id="form-pages" style="padding:var(--space-8);">
+          <!-- Pages rendered dynamically -->
+        </div>
+
+        <!-- Form Footer/Navigation -->
+        <footer class="form-footer-section" style="padding:var(--space-6) var(--space-8);border-top:1px solid var(--color-border);background:var(--color-bg-secondary);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);">
+          <div class="form-powered" style="font-size:var(--text-xs);color:var(--color-text-muted);">Powered by <a href="#" style="color:var(--color-primary);">FormCrafts</a></div>
+          <div class="form-navigation" id="form-navigation" style="display:flex;gap:var(--space-3);">
+            <button class="btn btn-secondary" id="btn-prev-page" style="display:none;"><span>←</span> Previous</button>
+            <button class="btn btn-primary" id="btn-next-page"><span>Next</span> <span>→</span></button>
+            <button class="btn btn-primary" id="btn-submit" style="display:none;"><span>✓</span> Submit</button>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <!-- Glossary Side Pane -->
+  <aside class="glossary-pane hidden" id="glossary-pane" style="position:fixed;top:0;right:0;width:380px;max-width:90vw;height:100vh;background:var(--color-bg);border-left:1px solid var(--color-border);box-shadow:var(--shadow-xl);z-index:var(--z-modal);display:flex;flex-direction:column;transform:translateX(100%);transition:transform var(--transition-base);">
+    <div class="glossary-header" style="padding:var(--space-4);border-bottom:1px solid var(--color-border);display:flex;align-items:center;justify-content:space-between;background:var(--color-bg-secondary);">
+      <div class="glossary-title-group" style="display:flex;align-items:center;gap:var(--space-3);">
+        <span style="font-size:1.5rem;">📖</span>
+        <div>
+          <h3 style="font-family:var(--font-heading);font-size:var(--text-lg);font-weight:600;">Glossary</h3>
+          <span class="glossary-subtitle" style="font-size:var(--text-xs);color:var(--color-text-muted);">Key Terms & Definitions</span>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-icon" id="close-glossary" style="width:36px;height:36px;border-radius:var(--radius-md);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="glossary-search" style="padding:var(--space-4);border-bottom:1px solid var(--color-border);">
+      <input type="search" class="form-input" id="glossary-search" placeholder="Search terms..." style="width:100%;">
+    </div>
+    <div class="glossary-content" id="glossary-content" style="flex:1;overflow-y:auto;padding:var(--space-4);">
+      <!-- Glossary terms rendered here -->
+    </div>
+  </aside>
+  <button class="glossary-toggle" id="glossary-toggle" style="position:fixed;bottom:var(--space-6);right:var(--space-6);z-index:var(--z-sticky);width:56px;height:56px;border-radius:var(--radius-full);background:var(--color-primary);color:white;box-shadow:var(--shadow-lg);display:flex;align-items:center;justify-content:center;font-size:1.25rem;display:none;">📖</button>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="success-modal">
+    <div class="modal" style="max-width:480px;text-align:center;">
+      <div class="modal-body" style="padding:var(--space-10);">
+        <div class="success-icon" style="width:80px;height:80px;border-radius:50%;background:var(--color-success-light);color:var(--color-success);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-6);font-size:2.5rem;">✓</div>
+        <h2 id="success-title" style="font-family:var(--font-heading);font-size:var(--text-2xl);font-weight:700;margin-bottom:var(--space-3);">Submitted Successfully!</h2>
+        <p id="success-message" style="color:var(--color-text-secondary);margin-bottom:var(--space-6);">Thank you for your submission.</p>
+        <div class="success-details" id="success-details" style="background:var(--color-bg-secondary);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-4);text-align:left;font-size:var(--text-sm);display:none;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);"><span style="color:var(--color-text-muted);">Response ID:</span><code id="success-response-id" style="font-family:var(--font-mono);"></code></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--color-text-muted);">Submitted:</span><span id="success-timestamp"></span></div>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:center;padding-top:0;">
+        <button class="btn btn-primary" onclick="closeModal('success-modal');location.reload();"><span>🔄</span> Submit Another</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/form.js"></script>
+</body>
+</html>
