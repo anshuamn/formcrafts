@@ -1,0 +1,31 @@
+{
+  "id": "ec2308b3-8b4b-4d6a-8448-8d6483ba5d22",
+  "title": "Test Survey",
+  "description": "A test survey form",
+  "settings": {
+    "showProgress": true,
+    "collectEmail": false,
+    "allowMultiple": false,
+    "confirmationMessage": "Thank you for your submission!",
+    "redirectUrl": "",
+    "theme": "default"
+  },
+  "pages": [
+    {
+      "id": "c5873bb8-baa1-4c22-87ac-63e1f4b80b3c",
+      "title": "Page 1",
+      "description": "",
+      "fields": []
+    }
+  ],
+  "logic": [],
+  "theme": {
+    "colors": {},
+    "fonts": {},
+    "spacing": {}
+  },
+  "createdAt": "2026-10-18T18:07:00.590Z",
+  "updatedAt": "2026-10-18T18:07:05.242Z",
+  "version": 3,
+  "published": true
+}
