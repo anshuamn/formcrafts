@@ -56,12 +56,16 @@ class LoginApp {
   }
 
   async handleLogin(e) {
+    console.log('=== handleLogin called ===', e);
     e.preventDefault();
+    console.log('preventDefault called');
     
     const btn = document.getElementById('login-btn');
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
     const remember = document.getElementById('login-remember').checked;
+
+    console.log('Form values:', { email, password: password ? '***' : '', remember });
 
     if (!email || !password) {
       this.showToast('Please enter email and password', 'warning');

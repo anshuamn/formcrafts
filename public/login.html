@@ -21,7 +21,7 @@
         <h2>Welcome Back</h2>
         <p class="login-subtitle">Sign in to access your dashboard</p>
 
-        <form id="login-form" class="login-form">
+        <form id="login-form" class="login-form" action="/login" method="POST">
           <div class="form-group">
             <label class="form-label" for="login-email">Email Address</label>
             <input type="email" class="form-input" id="login-email" name="email" placeholder="you@example.com" required autocomplete="email">
@@ -88,6 +88,26 @@
     </div>
   </div>
 
-  <script src="js/login.js"></script>
+  <script src="js/login.js?v=20241019"></script>
+  <script>
+    console.log('=== Login Page Debug ===');
+    console.log('LoginApp class:', typeof LoginApp);
+    console.log('Form element:', document.getElementById('login-form'));
+    console.log('Form method:', document.getElementById('login-form')?.method);
+    console.log('Email input:', document.getElementById('login-email'));
+    console.log('Password input:', document.getElementById('login-password'));
+    console.log('Remember checkbox:', document.getElementById('login-remember'));
+    console.log('Submit button:', document.getElementById('login-btn'));
+    
+    // Test if LoginApp loads
+    setTimeout(() => {
+      console.log('window.loginApp:', window.loginApp);
+      if (window.loginApp) {
+        console.log('LoginApp instance created successfully');
+      } else {
+        console.error('LoginApp NOT created!');
+      }
+    }, 100);
+  </script>
 </body>
 </html>
