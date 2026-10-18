@@ -46,7 +46,7 @@ class LoginApp {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
-          window.location.href = '/admin';
+          window.location.href = `/admin?token=${encodeURIComponent(token)}`;
           return;
         }
       } catch (e) {
@@ -71,28 +71,34 @@ class LoginApp {
     this.setLoading(btn, true);
 
     try {
-      // For demo: accept any credentials, create mock token
-      // In production, this would call /api/auth/login
-      const mockToken = 'fc_' + btoa(JSON.stringify({ 
-        email, 
-        name: email.split('@')[0],
-        role: 'admin',
-        exp: Date.now() + (remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000)
-      }));
+      // Call the real API
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, remember })
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
 
-      sessionStorage.setItem('formcrafts_token', mockToken);
+      const token = data.token;
+      
+      sessionStorage.setItem('formcrafts_token', token);
       if (remember) {
-        localStorage.setItem('formcrafts_token', mockToken);
+        localStorage.setItem('formcrafts_token', token);
       }
 
       this.showToast('Welcome back!', 'success');
       
       setTimeout(() => {
-        window.location.href = '/admin';
+        window.location.href = `/admin?token=${encodeURIComponent(token)}`;
       }, 800);
 
     } catch (error) {
-      this.showToast('Login failed. Please try again.', 'error');
+      this.showToast('Login failed: ' + error.message, 'error');
     } finally {
       this.setLoading(btn, false);
     }
