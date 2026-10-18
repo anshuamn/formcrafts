@@ -1,0 +1,53 @@
+# Railway ignore file - excludes files from deployment
+.git
+.gitignore
+README.md
+DEPLOYMENT.md
+.dockerignore
+.dockerfile
+Dockerfile
+docker-compose.yml
+docker-compose.staging.yml
+deploy.sh
+fix-escape.cjs
+fix-escape.js
+.env
+.env.local
+.env.production
+.env.staging
+.env.example
+nginx.conf
+deploy.sh
+*.md
+!README.md
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+# OS
+.DS_Store
+Thumbs.db
+# Test coverage
+coverage/
+# Temporary files
+tmp/
+temp/
+# Logs
+logs/
+*.log
+npm-debug.log*
+# Data files (local only)
+data/
+*.sqlite
+*.db
+# SSL certificates
+certs/
+# Backup files
+*.tar.gz
+backup-*.tar.gz
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
