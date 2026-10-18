@@ -59,7 +59,7 @@ class LoginApp {
     console.log('=== handleLogin called ===', e);
     e.preventDefault();
     console.log('preventDefault called');
-    
+
     const btn = document.getElementById('login-btn');
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
@@ -81,22 +81,22 @@ class LoginApp {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, remember })
       });
-      
+
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.error || 'Login failed');
       }
 
       const token = data.token;
-      
+
       sessionStorage.setItem('formcrafts_token', token);
       if (remember) {
         localStorage.setItem('formcrafts_token', token);
       }
 
       this.showToast('Welcome back!', 'success');
-      
+
       setTimeout(() => {
         window.location.href = `/admin?token=${encodeURIComponent(token)}`;
       }, 800);
@@ -112,7 +112,7 @@ class LoginApp {
     const input = document.getElementById('login-password');
     const toggle = document.getElementById('toggle-password');
     const isPassword = input.type === 'password';
-    
+
     input.type = isPassword ? 'text' : 'password';
     toggle.querySelector('.eye-open').classList.toggle('hidden', isPassword);
     toggle.querySelector('.eye-closed').classList.toggle('hidden', !isPassword);
@@ -125,7 +125,7 @@ class LoginApp {
   setLoading(btn, loading) {
     const text = btn.querySelector('.btn-text');
     const loadingEl = btn.querySelector('.btn-loading');
-    
+
     btn.disabled = loading;
     text.classList.toggle('hidden', loading);
     loadingEl.classList.toggle('hidden', !loading);
