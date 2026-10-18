@@ -56,18 +56,18 @@
         </div>
 
         <div class="social-login">
-          <button type="button" class="btn btn-secondary social-btn" id="login-google">
+          <button type="button" class="btn btn-secondary social-btn" id="login-google" onclick="socialLogin('google')">
             <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
             <span>Google</span>
           </button>
-          <button type="button" class="btn btn-secondary social-btn" id="login-microsoft">
+          <button type="button" class="btn btn-secondary social-btn" id="login-microsoft" onclick="socialLogin('microsoft')">
             <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#F25022" d="M12.56 6.61v1.75H8.26c.05 1.27.47 3.45 1.25 4.67 1.47-1.87 3.7-2.87 4.88-2.77v1.69c-2.18-.27-5.1.34-5.98 2.99-.35.92-.56 2-.56 3.17v1.93h6.36v3.17h-3.36c-.43 2.13-2.73 4.76-7.12 4.76-5.28 0-9.06-4.3-9.06-9.56S3.86 2.7 9.14 2.7c3.08 0 5.52 1.83 6.54 4.64-.92-.38-1.9-.6-2.86-.6-1.43 0-2.6.49-3.52 1.35 2.86 1.43 4.48 4.6 4.48 8.1 0 4.36-2.72 7.84-7.38 8.85v.22c1.63.19 3.2.3 4.7.3 5.62 0 9.6-4.6 9.6-9.61 0-.6-.05-1.2-.12-1.78H13.9c-.16 1.4-.73 2.83-1.34 3.95-.08-.5-.14-1.01-.14-1.52v-1.78h5.5v-1.52z"/><path fill="#7FBA00" d="M24 7.98h-5.17V5.03c2.07-.96 3.52-2.95 3.52-5.04C24 1.36 22.64 0 21.3 0c-1.74 0-3.23.99-3.97 2.55H14.67v2.1c-.32-1.4-1.34-2.9-2.94-3.66C13 1.4 13.64.7 15 .7c2.7 0 4.74 2.38 4.74 5.28 0 2.9-2.04 4.64-3.74 5.52v3.02c3.08.54 4.8 2.68 4.8 5.12 0 2.87-1.75 5.05-4.5 5.05-2.02 0-3.85-1.14-4.63-2.78v-1.63h-1.28v1.63c-.8 1.67-2.56 2.78-4.55 2.78-2.83 0-5.25-1.7-5.8-4.04l-1.42-3.63H1.5v6.22c0 6.83 5.57 12.4 12.4 12.4 6.73 0 12.1-5.43 12.1-12.14v-4.43z"/><path fill="#00A4EF" d="M1.5 14.2v6.22C1.5 26.8 7.07 32 14.1 32c6.73 0 12.1-5.43 12.1-12.14v-4.43h-1.28c-.07.6-.12 1.2-.12 1.78 0 5.62-4.6 9.61-9.6 9.61-5.62 0-9.6-4.6-9.6-9.61 0-.6-.05-1.2-.12-1.78H1.5z"/><path fill="#FFB900" d="M21.3 24c-2.7 0-4.74-2.38-4.74-5.28 0-2.9 2.04-4.64 3.74-5.52v-3.02c-3.08-.54-4.8-2.68-4.8-5.12 0-2.87 1.75-5.05 4.5-5.05 2.02 0 3.85 1.14 4.63 2.78v1.63h1.28v-1.63c.8-1.67 2.56-2.78 4.55-2.78 2.83 0 5.25 1.7 5.8 4.04l1.42 3.63h3.58v-6.22c0-6.83-5.57-12.4-12.4-12.4-6.73 0-12.1 5.43 12.1-12.14v4.43z"/></svg>
             <span>Microsoft</span>
           </button>
         </div>
 
         <p class="login-footer">
-          Don't have an account? <a href="#" id="signup-link">Create one</a>
+          Don't have an account? <a href="#" id="signup-link" onclick="event.preventDefault(); alert('Sign up coming soon!')">Create one</a>
         </p>
       </div>
 
@@ -88,26 +88,92 @@
     </div>
   </div>
 
-  <script src="js/login.js?v=20241019"></script>
   <script>
-    console.log('=== Login Page Debug ===');
-    console.log('LoginApp class:', typeof LoginApp);
-    console.log('Form element:', document.getElementById('login-form'));
-    console.log('Form method:', document.getElementById('login-form')?.method);
-    console.log('Email input:', document.getElementById('login-email'));
-    console.log('Password input:', document.getElementById('login-password'));
-    console.log('Remember checkbox:', document.getElementById('login-remember'));
-    console.log('Submit button:', document.getElementById('login-btn'));
-    
-    // Test if LoginApp loads
-    setTimeout(() => {
-      console.log('window.loginApp:', window.loginApp);
-      if (window.loginApp) {
-        console.log('LoginApp instance created successfully');
-      } else {
-        console.error('LoginApp NOT created!');
+    // Simple inline login handler - no modules, no imports
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Login page loaded');
+      
+      // Password toggle
+      var toggleBtn = document.getElementById('toggle-password');
+      var passwordInput = document.getElementById('login-password');
+      if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener('click', function() {
+          var isPassword = passwordInput.type === 'password';
+          passwordInput.type = isPassword ? 'text' : 'password';
+          toggleBtn.querySelector('.eye-open').classList.toggle('hidden', isPassword);
+          toggleBtn.querySelector('.eye-closed').classList.toggle('hidden', !isPassword);
+        });
       }
-    }, 100);
+
+      // Login form - use fetch for better UX, fallback to regular submit
+      var form = document.getElementById('login-form');
+      var btn = document.getElementById('login-btn');
+      var btnText = btn ? btn.querySelector('.btn-text') : null;
+      var btnLoading = btn ? btn.querySelector('.btn-loading') : null;
+
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault(); // Always prevent default, we handle via fetch
+          
+          var emailInput = document.getElementById('login-email');
+          var passwordInput = document.getElementById('login-password');
+          var rememberInput = document.getElementById('login-remember');
+          
+          var email = emailInput ? emailInput.value.trim() : '';
+          var password = passwordInput ? passwordInput.value : '';
+          var remember = rememberInput ? rememberInput.checked : false;
+
+          console.log('Login attempt:', { email: email, remember: remember });
+
+          if (!email || !password) {
+            alert('Please enter email and password');
+            return;
+          }
+
+          // Show loading state
+          if (btn) btn.disabled = true;
+          if (btnText) btnText.classList.add('hidden');
+          if (btnLoading) btnLoading.classList.remove('hidden');
+
+          // Use fetch to call API
+          fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ email: email, password: password, remember: remember })
+          })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            console.log('Login response:', data);
+            if (data.success && data.token) {
+              // Store token
+              sessionStorage.setItem('formcrafts_token', data.token);
+              if (document.getElementById('login-remember').checked) {
+                localStorage.setItem('formcrafts_token', data.token);
+              }
+              // Redirect to admin
+              window.location.href = '/admin?token=' + encodeURIComponent(data.token);
+            } else {
+              throw new Error(data.error || 'Login failed');
+            }
+          })
+          .catch(function(err) {
+            console.error('Login error:', err);
+            alert('Login failed: ' + err.message);
+          })
+          .finally(function() {
+            if (btn) btn.disabled = false;
+            if (btnText) btnText.classList.remove('hidden');
+            if (btnLoading) btnLoading.classList.add('hidden');
+          });
+        });
+      });
+
+      // Social login placeholders
+      window.socialLogin = function(provider) {
+        alert(provider.charAt(0).toUpperCase() + provider.slice(1) + ' login coming soon!');
+      };
+    });
   </script>
 </body>
 </html>

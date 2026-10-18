@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# Docker
+.docker/
+
+# Temporary files
+tmp/
+temp/
+
+# Data files (optional - uncomment to exclude data)
+# data/
+
+# SSL certificates
+certs/
+
+# Backup files
+*.tar.gz
+backup-*.tar.gz
