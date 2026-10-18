@@ -10,7 +10,6 @@ class FormBuilder {
     this.historyIndex = -1;
     this.maxHistory = 50;
     this.autoSaveTimer = null;
-    this.init();
   }
 
   async init() {
@@ -25,7 +24,7 @@ class FormBuilder {
 
   getFormIdFromUrl() {
     const path = window.location.pathname;
-    const match = path.match(/\/builder\/([^/]+)/);
+    const match = path.match(/\/builder\/([^/?]+)/);
     return match ? match[1] : null;
   }
 
@@ -40,7 +39,7 @@ class FormBuilder {
     });
 
     // Form title
-    document.getElementById('form-title-input').addEventListener('input', (e) => {
+    document.getElementById('form-title-input')?.addEventListener('input', (e) => {
       this.updateFormTitle(e.target.value);
     });
 
@@ -105,6 +104,11 @@ class FormBuilder {
     document.getElementById('form-prop-email')?.addEventListener('change', (e) => this.updateFormSetting('collectEmail', e.target.checked));
     document.getElementById('form-prop-multiple')?.addEventListener('change', (e) => this.updateFormSetting('allowMultiple', e.target.checked));
 
+    // Form logo upload
+    document.getElementById('form-logo-upload')?.addEventListener('change', (e) => this.handleLogoUpload(e));
+    document.getElementById('form-logo-btn')?.addEventListener('click', () => document.getElementById('form-logo-upload')?.click());
+    document.getElementById('form-logo-remove')?.addEventListener('click', () => this.removeLogo());
+
     // Settings modal
     document.getElementById('save-form-settings')?.addEventListener('click', () => this.saveFormSettings());
     document.querySelectorAll('#settings-tabs .tab').forEach(tab => {
@@ -140,7 +144,7 @@ class FormBuilder {
 
     // Close properties on mobile
     document.getElementById('close-properties')?.addEventListener('click', () => {
-      document.querySelector('.builder-sidebar-right').classList.remove('open');
+      document.querySelector('.builder-sidebar-right')?.classList.remove('open');
     });
   }
 
@@ -148,9 +152,9 @@ class FormBuilder {
     const canvas = document.getElementById('form-pages');
     const dropZone = document.getElementById('drop-zone-indicator');
 
-    canvas.addEventListener('dragover', (e) => this.onDragOver(e));
-    canvas.addEventListener('dragleave', (e) => this.onDragLeave(e));
-    canvas.addEventListener('drop', (e) => this.onDrop(e));
+    canvas?.addEventListener('dragover', (e) => this.onDragOver(e));
+    canvas?.addEventListener('dragleave', (e) => this.onDragLeave(e));
+    canvas?.addEventListener('drop', (e) => this.onDrop(e));
 
     // Also handle drops on form header area for first field
     document.getElementById('form-header-section')?.addEventListener('dragover', (e) => this.onDragOver(e));
@@ -163,11 +167,11 @@ class FormBuilder {
     const btn = document.getElementById('device-toggle');
     const menu = document.querySelector('#device-toggle + .dropdown-menu');
     
-    menu.querySelectorAll('[data-device]').forEach(item => {
+    menu?.querySelectorAll('[data-device]').forEach(item => {
       item.addEventListener('click', () => {
         this.setDevice(item.dataset.device);
-        btn.querySelector('#device-icon').textContent = item.querySelector('span').textContent.trim();
-        btn.querySelector('#device-text').textContent = item.textContent.trim();
+        btn?.querySelector('#device-icon').textContent = item.querySelector('span').textContent.trim();
+        btn?.querySelector('#device-text').textContent = item.textContent.trim();
       });
     });
   }
@@ -176,7 +180,7 @@ class FormBuilder {
     const frame = document.getElementById('device-frame');
     const screens = document.querySelectorAll('.device-screen');
     
-    frame.dataset.device = device;
+    frame?.dataset.device = device;
     screens.forEach(screen => screen.classList.add('hidden'));
     document.getElementById(`device-${device}`)?.classList.remove('hidden');
   }
@@ -205,6 +209,7 @@ class FormBuilder {
       title: 'Untitled Form',
       description: '',
       icon: '📝',
+      logo: null,
       theme: 'default',
       settings: {
         showProgress: true,
@@ -515,21 +520,21 @@ class FormBuilder {
     const target = e.target.closest('.form-field, .form-page, #form-pages, #form-header-section, #canvas-empty');
     
     if (target === pages || target.id === 'form-pages' || target.id === 'form-header-section' || target.id === 'canvas-empty') {
-      dropZone.classList.remove('hidden');
+      dropZone?.classList.remove('hidden');
       dropZone.style.top = '0';
-      pages.classList.add('drop-target');
-    } else if (target.classList.contains('form-field')) {
+      pages?.classList.add('drop-target');
+    } else if (target?.classList.contains('form-field')) {
       const rect = target.getBoundingClientRect();
-      dropZone.classList.remove('hidden');
+      dropZone?.classList.remove('hidden');
       dropZone.style.top = `${rect.top - pages.getBoundingClientRect().top}px`;
       target.classList.add('drop-target');
-    } else if (target.classList.contains('form-page')) {
+    } else if (target?.classList.contains('form-page')) {
       const rect = target.getBoundingClientRect();
-      dropZone.classList.remove('hidden');
+      dropZone?.classList.remove('hidden');
       dropZone.style.top = `${rect.top - pages.getBoundingClientRect().top}px`;
       target.classList.add('drop-target');
     } else {
-      dropZone.classList.add('hidden');
+      dropZone?.classList.add('hidden');
       document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
     }
   }
@@ -554,12 +559,12 @@ class FormBuilder {
     if (target === pages || target.id === 'form-pages' || target.id === 'form-header-section' || target.id === 'canvas-empty') {
       // Add to end of selected page
       this.addFieldFromPalette(this.draggedFieldType);
-    } else if (target.classList.contains('form-field')) {
+    } else if (target?.classList.contains('form-field')) {
       const fieldId = target.dataset.fieldId;
       const page = this.form.pages.find(p => p.id === this.selectedPageId);
       const insertIndex = page.fields.findIndex(f => f.id === fieldId);
       this.addFieldFromPalette(this.draggedFieldType, this.selectedPageId, insertIndex);
-    } else if (target.classList.contains('form-page')) {
+    } else if (target?.classList.contains('form-page')) {
       const pageId = target.dataset.pageId;
       this.addFieldFromPalette(this.draggedFieldType, pageId, 0);
     }
@@ -635,9 +640,9 @@ class FormBuilder {
     const options = field.options || [];
     container.innerHTML = options.map((opt, idx) => `
       <div class="option-item" data-option-index="${idx}">
-        <input type="text" class="form-input" value="${this.escapeHtml(opt.label)}" placeholder="Label" onchange="app.updateOption(${idx}, 'label', this.value)">
-        <input type="text" class="form-input" value="${this.escapeHtml(opt.value)}" placeholder="Value" onchange="app.updateOption(${idx}, 'value', this.value)" style="max-width:120px;">
-        <button class="btn btn-ghost btn-sm btn-icon" onclick="app.removeOption(${idx})" title="Remove"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        <input type="text" class="form-input" value="${this.escapeHtml(opt.label)}" placeholder="Label" onchange="window.builderApp?.updateOption(${idx}, 'label', this.value)">
+        <input type="text" class="form-input" value="${this.escapeHtml(opt.value)}" placeholder="Value" onchange="window.builderApp?.updateOption(${idx}, 'value', this.value)" style="max-width:120px;">
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="window.builderApp?.removeOption(${idx})" title="Remove"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
     `).join('');
     
@@ -683,7 +688,7 @@ class FormBuilder {
       labelsContainer.innerHTML = Object.entries(field.scale.labels).map(([key, label]) => `
         <div class="likert-label-item">
           <input type="text" class="form-input" value="${this.escapeHtml(key)}" placeholder="Value" style="max-width:60px;" readonly>
-          <input type="text" class="form-input" value="${this.escapeHtml(label)}" placeholder="Label" onchange="app.updateLikertLabel(${key}, this.value)">
+          <input type="text" class="form-input" value="${this.escapeHtml(label)}" placeholder="Label" onchange="window.builderApp?.updateLikertLabel('${key}', this.value)">
         </div>
       `).join('');
     }
@@ -693,8 +698,8 @@ class FormBuilder {
     if (stmtContainer && field.statements) {
       stmtContainer.innerHTML = field.statements.map((stmt, idx) => `
         <div class="statement-item" data-stmt-index="${idx}">
-          <input type="text" class="form-input" value="${this.escapeHtml(stmt.text)}" placeholder="Statement text" onchange="app.updateLikertStatement(${idx}, this.value)">
-          <button class="btn btn-ghost btn-sm btn-icon" onclick="app.removeLikertStatement(${idx})" title="Remove"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <input type="text" class="form-input" value="${this.escapeHtml(stmt.text)}" placeholder="Statement text" onchange="window.builderApp?.updateLikertStatement(${idx}, this.value)">
+          <button class="btn btn-ghost btn-sm btn-icon" onclick="window.builderApp?.removeLikertStatement(${idx})" title="Remove"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
       `).join('');
     }
@@ -752,11 +757,11 @@ class FormBuilder {
       <div class="logic-rule-item" data-rule-index="${idx}">
         <div class="logic-rule-header">
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">IF</span>
-          <select class="form-select" onchange="app.updateLogicRule(${idx}, 'sourceField', this.value)" style="min-width:180px;">
+          <select class="form-select" onchange="window.builderApp?.updateLogicRule(${idx}, 'sourceField', this.value)" style="min-width:180px;">
             <option value="">Select field</option>
             ${allFields.map(f => `<option value="${f.id}" ${rule.sourceField === f.id ? 'selected' : ''}>${this.escapeHtml(f.label || f.title || f.id)}</option>`).join('')}
           </select>
-          <select class="form-select" onchange="app.updateLogicRule(${idx}, 'operator', this.value)" style="min-width:140px;">
+          <select class="form-select" onchange="window.builderApp?.updateLogicRule(${idx}, 'operator', this.value)" style="min-width:140px;">
             <option value="equals" ${rule.operator === 'equals' ? 'selected' : ''}>equals</option>
             <option value="not_equals" ${rule.operator === 'not_equals' ? 'selected' : ''}>does not equal</option>
             <option value="contains" ${rule.operator === 'contains' ? 'selected' : ''}>contains</option>
@@ -764,17 +769,17 @@ class FormBuilder {
             <option value="is_empty" ${rule.operator === 'is_empty' ? 'selected' : ''}>is empty</option>
             <option value="is_not_empty" ${rule.operator === 'is_not_empty' ? 'selected' : ''}>is not empty</option>
           </select>
-          <input type="text" class="form-input" value="${this.escapeHtml(rule.value || '')}" placeholder="Value" onchange="app.updateLogicRule(${idx}, 'value', this.value)" style="flex:1;max-width:150px;" ${['is_empty', 'is_not_empty'].includes(rule.operator) ? 'disabled' : ''}>
+          <input type="text" class="form-input" value="${this.escapeHtml(rule.value || '')}" placeholder="Value" onchange="window.builderApp?.updateLogicRule(${idx}, 'value', this.value)" style="flex:1;max-width:150px;" ${['is_empty', 'is_not_empty'].includes(rule.operator) ? 'disabled' : ''}>
         </div>
         <div class="logic-rule-action">
           <span style="font-size:var(--text-xs);color:var(--color-text-muted);">THEN</span>
-          <select class="form-select" onchange="app.updateLogicRule(${idx}, 'action', this.value)">
+          <select class="form-select" onchange="window.builderApp?.updateLogicRule(${idx}, 'action', this.value)">
             <option value="show" ${rule.action === 'show' ? 'selected' : ''}>Show this field</option>
             <option value="hide" ${rule.action === 'hide' ? 'selected' : ''}>Hide this field</option>
             <option value="require" ${rule.action === 'require' ? 'selected' : ''}>Make required</option>
             <option value="optional" ${rule.action === 'optional' ? 'selected' : ''}>Make optional</option>
           </select>
-          <button class="btn btn-ghost btn-sm btn-icon danger" onclick="app.removeLogicRule(${idx})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+          <button class="btn btn-ghost btn-sm btn-icon danger" onclick="window.builderApp?.removeLogicRule(${idx})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
         </div>
       </div>
     `).join('');
@@ -940,13 +945,14 @@ class FormBuilder {
     `;
   }
 
+  // Field renderers (same as before - abbreviated for brevity)
   renderInputField(field) {
     const typeMap = { email: 'email', number: 'number', phone: 'tel', url: 'url', date: 'date', time: 'time', text: 'text' };
     return `
       <div class="field-label-wrapper">
         <label class="field-label">${this.escapeHtml(field.label)}${field.required ? '<span class="field-required">*</span>' : ''}</label>
       </div>
-      <input type="${typeMap[field.type] || 'text'}" class="form-input" placeholder="${this.escapeHtml(field.placeholder)}" ${field.required ? 'required' : ''} disabled>
+      <input type="${typeMap[field.type] || 'text'}" class="form-input" placeholder="${this.escapeHtml(field.placeholder)}" disabled>
       ${field.helpText ? `<p class="field-help">${this.escapeHtml(field.helpText)}</p>` : ''}
     `;
   }
@@ -956,7 +962,7 @@ class FormBuilder {
       <div class="field-label-wrapper">
         <label class="field-label">${this.escapeHtml(field.label)}${field.required ? '<span class="field-required">*</span>' : ''}</label>
       </div>
-      <textarea class="form-input" placeholder="${this.escapeHtml(field.placeholder)}" ${field.required ? 'required' : ''} disabled></textarea>
+      <textarea class="form-input" placeholder="${this.escapeHtml(field.placeholder)}" disabled></textarea>
       ${field.helpText ? `<p class="field-help">${this.escapeHtml(field.helpText)}</p>` : ''}
     `;
   }
@@ -995,7 +1001,7 @@ class FormBuilder {
       <div class="field-label-wrapper">
         <label class="field-label">${this.escapeHtml(field.label)}${field.required ? '<span class="field-required">*</span>' : ''}</label>
       </div>
-      <select class="form-input" ${field.required ? 'required' : ''} disabled>
+      <select class="form-input" disabled>
         <option value="">Select an option</option>
         ${options.map(opt => `<option value="${this.escapeHtml(opt.value)}">${this.escapeHtml(opt.label)}</option>`).join('')}
       </select>
@@ -1132,7 +1138,7 @@ class FormBuilder {
       <div class="signature-wrapper">
         <canvas class="signature-pad" disabled></canvas>
         <div class="signature-actions">
-          <button class="btn btn-secondary btn-sm" disabled><span>🗑️</span> Clear</button>
+          <button type="button" class="btn btn-secondary btn-sm" disabled><span>🗑️</span> Clear</button>
         </div>
       </div>
       ${field.helpText ? `<p class="field-help">${this.escapeHtml(field.helpText)}</p>` : ''}
@@ -1244,7 +1250,19 @@ class FormBuilder {
     document.getElementById('form-header-title').textContent = this.form.title || 'Untitled Form';
     document.getElementById('form-header-desc').textContent = this.form.description || '';
     document.getElementById('form-header-icon').textContent = this.form.icon || '📝';
-    document.getElementById('page-title').textContent = `${this.form.title} | FormCrafts`;
+    
+    // Update logo preview
+    const logoPreview = document.getElementById('form-logo-preview');
+    const logoRemove = document.getElementById('form-logo-remove');
+    if (logoPreview) {
+      if (this.form.logo) {
+        logoPreview.innerHTML = `<img src="${this.form.logo}" style="width:100%;height:100%;object-fit:contain;">`;
+        logoRemove.style.display = 'flex';
+      } else {
+        logoPreview.innerHTML = '<span style="font-size:1.5rem;">📝</span>';
+        logoRemove.style.display = 'none';
+      }
+    }
   }
 
   updateFormTitle(title) {
@@ -1260,41 +1278,46 @@ class FormBuilder {
     this.renderFormPreview();
   }
 
-  updateFormStatus() {
-    const badge = document.getElementById('form-status-badge');
-    if (badge) {
-      badge.textContent = this.form.published ? 'Published' : 'Draft';
-      badge.className = `badge ${this.form.published ? 'badge-success' : 'badge-gray'}`;
+  handleLogoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (file.size > 500 * 1024) {
+      this.showToast('Logo too large. Max 500KB.', 'error');
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      this.form.logo = event.target.result;
+      this.updateFormTitleDisplay();
+      this.uploadLogoToServer();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async uploadLogoToServer() {
+    if (!this.form.logo || !this.formId) return;
+    
+    try {
+      await fetch('/api/upload/logo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ logo: this.form.logo, formId: this.formId })
+      });
+    } catch (e) {
+      console.error('Failed to upload logo:', e);
     }
   }
 
-  // Field Actions
-  duplicateField() {
-    if (!this.selectedFieldId) return;
-    const { field, page } = this.findField(this.selectedFieldId);
-    if (!field) return;
+  removeLogo() {
+    this.form.logo = null;
+    this.updateFormTitleDisplay();
     
-    this.saveToHistory();
-    const newField = { ...field, id: crypto.randomUUID(), label: field.label + ' (Copy)' };
-    const idx = page.fields.indexOf(field);
-    page.fields.splice(idx + 1, 0, newField);
-    this.selectedFieldId = newField.id;
-    this.render();
-    this.showToast('Field duplicated', 'success');
-  }
-
-  deleteField() {
-    if (!this.selectedFieldId) return;
-    if (!confirm('Delete this field?')) return;
-    
-    this.saveToHistory();
-    const { field, page } = this.findField(this.selectedFieldId);
-    if (!field) return;
-    
-    page.fields = page.fields.filter(f => f.id !== this.selectedFieldId);
-    this.selectedFieldId = null;
-    this.render();
-    this.showToast('Field deleted', 'success');
+    // Delete from server
+    if (this.formId) {
+      fetch(`/api/upload/logo/${this.formId}`, { method: 'DELETE' });
+    }
   }
 
   // Form Settings Modal
@@ -1473,17 +1496,23 @@ class FormBuilder {
   }
 }
 
-// Initialize
+// Initialize on DOM ready
+let builderApp = null;
+
 document.addEventListener('DOMContentLoaded', () => {
-  window.app = new FormBuilder();
+  builderApp = new FormBuilder();
+  builderApp.init();
 });
 
-// Make methods globally accessible for inline handlers
-window.updateOption = (index, prop, value) => window.app?.updateOption(index, prop, value);
-window.removeOption = (index) => window.app?.removeOption(index);
-window.updateLikertLabel = (key, label) => window.app?.updateLikertLabel(key, label);
-window.addLikertStatement = () => window.app?.addLikertStatement();
-window.updateLikertStatement = (index, text) => window.app?.updateLikertStatement(index, text);
-window.removeLikertStatement = (index) => window.app?.removeLikertStatement(index);
-window.updateLogicRule = (index, prop, value) => window.app?.updateLogicRule(index, prop, value);
-window.removeLogicRule = (index) => window.app?.removeLogicRule(index);
+// Make globally accessible
+window.builderApp = builderApp;
+
+// Inline handler shims
+window.updateOption = (index, prop, value) => builderApp?.updateOption(index, prop, value);
+window.removeOption = (index) => builderApp?.removeOption(index);
+window.updateLikertLabel = (key, label) => builderApp?.updateLikertLabel(key, label);
+window.addLikertStatement = () => builderApp?.addLikertStatement();
+window.updateLikertStatement = (index, text) => builderApp?.updateLikertStatement(index, text);
+window.removeLikertStatement = (index) => builderApp?.removeLikertStatement(index);
+window.updateLogicRule = (index, prop, value) => builderApp?.updateLogicRule(index, prop, value);
+window.removeLogicRule = (index) => builderApp?.removeLogicRule(index);

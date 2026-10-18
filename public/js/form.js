@@ -8,7 +8,6 @@ class FormApp {
     this.errors = {};
     this.startTime = Date.now();
     this.isSubmitting = false;
-    this.init();
   }
 
   async init() {
@@ -59,6 +58,33 @@ class FormApp {
     document.getElementById('form-pages')?.addEventListener('dragleave', (e) => this.handleDragLeave(e));
     document.getElementById('form-pages')?.addEventListener('drop', (e) => this.handleDrop(e));
 
+    // Rating stars
+    document.getElementById('form-pages')?.addEventListener('click', (e) => {
+      if (e.target.closest('.rating-star')) {
+        const star = e.target.closest('.rating-star');
+        const fieldId = star.closest('.rating-field').dataset.fieldId;
+        const value = parseInt(star.dataset.value);
+        this.setAnswer(fieldId, value);
+        this.updateRatingDisplay(fieldId, value);
+      }
+    });
+
+    // Scale options
+    document.getElementById('form-pages')?.addEventListener('change', (e) => {
+      if (e.target.matches('.scale-option input')) {
+        this.setAnswer(e.target.name, e.target.value);
+        this.clearError(e.target.name);
+      }
+    });
+
+    // Signature pads
+    document.getElementById('form-pages')?.addEventListener('mousedown', (e) => {
+      if (e.target.matches('.signature-pad')) this.startSignature(e);
+    });
+    document.getElementById('form-pages')?.addEventListener('touchstart', (e) => {
+      if (e.target.matches('.signature-pad')) this.startSignature(e);
+    });
+
     // Auto-save draft to localStorage
     window.addEventListener('beforeunload', () => this.saveDraft());
   }
@@ -93,6 +119,11 @@ class FormApp {
     document.getElementById('form-header-icon').textContent = this.form.icon || '📝';
     document.getElementById('form-header-title').textContent = this.form.title;
     document.getElementById('form-header-desc').textContent = this.form.description || '';
+    
+    // Update logo if present
+    if (this.form.logo) {
+      document.getElementById('form-header-icon').innerHTML = `<img src="${this.form.logo}" style="width:100%;height:100%;object-fit:contain;border-radius:var(--radius-lg);">`;
+    }
     
     // Render pages
     this.renderPages();
@@ -190,7 +221,7 @@ class FormApp {
         fieldHtml = `<div class="html-content">${field.content || ''}</div>`;
         break;
       case 'page_break':
-        fieldHtml = ''; // Handled by page structure
+        fieldHtml = '';
         break;
       case 'consent':
         fieldHtml = this.renderConsentField(field, value, error);
@@ -213,6 +244,7 @@ class FormApp {
     `;
   }
 
+  // Field renderers (abbreviated for brevity - same logic as builder)
   renderInputField(field, value, error) {
     const typeMap = { email: 'email', number: 'number', phone: 'tel', url: 'url', date: 'date', time: 'time', text: 'text' };
     return `
@@ -420,7 +452,7 @@ class FormApp {
               <div class="file-item-name">${this.escapeHtml(file.name)}</div>
               <div class="file-item-size">${this.formatFileSize(file.size)}</div>
             </div>
-            <button type="button" class="file-item-remove" onclick="app.removeFile('${field.id}', ${idx})">✕</button>
+            <button type="button" class="file-item-remove" onclick="window.formApp?.removeFile('${field.id}', ${idx})">✕</button>
           </div>
         `).join('')}
       </div>
@@ -436,7 +468,7 @@ class FormApp {
       <div class="signature-wrapper">
         <canvas class="signature-pad ${error ? 'error' : ''}" data-field-id="${field.id}" width="600" height="200"></canvas>
         <div class="signature-actions">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="app.clearSignature('${field.id}')"><span>🗑️</span> Clear</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.formApp?.clearSignature('${field.id}')"><span>🗑️</span> Clear</button>
         </div>
       </div>
       ${field.helpText ? `<p class="field-help">${this.escapeHtml(field.helpText)}</p>` : ''}
@@ -513,20 +545,15 @@ class FormApp {
   }
 
   bindFieldEvents() {
-    // Rating stars
-    document.querySelectorAll('.rating-star').forEach(star => {
-      star.addEventListener('click', (e) => {
-        const fieldId = e.currentTarget.closest('.rating-field').dataset.fieldId;
-        const value = parseInt(e.currentTarget.dataset.value);
-        this.setAnswer(fieldId, value);
-        this.updateRatingDisplay(fieldId, value);
-      });
-    });
-
-    // Scale options
-    document.querySelectorAll('.scale-option input').forEach(input => {
-      input.addEventListener('change', (e) => {
-        this.setAnswer(e.target.name, e.target.value);
+    // Choice items
+    document.querySelectorAll('.choice-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (e.target.tagName === 'INPUT') return;
+        const input = item.querySelector('input');
+        if (input) {
+          input.click();
+          input.dispatchEvent(new Event('change'));
+        }
       });
     });
 
@@ -543,18 +570,6 @@ class FormApp {
         }
       });
       upload.querySelector('input[type="file"]').addEventListener('change', (e) => this.handleFileSelect(e));
-    });
-
-    // Choice items
-    document.querySelectorAll('.choice-item').forEach(item => {
-      item.addEventListener('click', (e) => {
-        if (e.target.tagName === 'INPUT') return;
-        const input = item.querySelector('input');
-        if (input) {
-          input.click();
-          input.dispatchEvent(new Event('change'));
-        }
-      });
     });
   }
 
@@ -686,17 +701,15 @@ class FormApp {
       size: f.size,
       type: f.type,
       lastModified: f.lastModified,
-      // Store as base64 for draft saving (in production, upload to server)
-      data: null // Will be set via FileReader
+      data: null
     }));
     
-    // Read files as base64 for draft
     Promise.all(newFiles.map(f => this.readFileAsBase64(f))).then(base64Files => {
       this.setAnswer(fieldId, [...existingFiles, ...base64Files]);
       this.renderFieldInPlace(fieldId);
     });
     
-    input.value = ''; // Reset for re-selection
+    input.value = '';
   }
 
   readFileAsBase64(file) {
@@ -801,8 +814,8 @@ class FormApp {
       email: 'Please enter a valid email address',
       url: 'Please enter a valid URL',
       number: 'Please enter a valid number',
-      min_length: `Must be at least ${this.answers[field.id]?.validationValue} characters`,
-      max_length: `Must be no more than ${this.answers[field.id]?.validationValue} characters`,
+      min_length: `Must be at least ${field?.validationValue} characters`,
+      max_length: `Must be no more than ${field?.validationValue} characters`,
       pattern: 'Invalid format'
     };
     return messages[type] || 'Invalid value';
@@ -918,7 +931,7 @@ class FormApp {
   loadDraft() {
     try {
       const draft = JSON.parse(localStorage.getItem(`formcrafts_draft_${this.formId}`) || '{}');
-      if (draft.answers && Date.now() - draft.timestamp < 86400000) { // 24 hours
+      if (draft.answers && Date.now() - draft.timestamp < 86400000) {
         this.answers = draft.answers;
         this.currentPageIndex = draft.currentPageIndex || 0;
       }
@@ -930,7 +943,7 @@ class FormApp {
   }
 
   startAutoSave() {
-    setInterval(() => this.saveDraft(), 10000); // Every 10 seconds
+    setInterval(() => this.saveDraft(), 10000);
   }
 
   // Submission
@@ -1084,7 +1097,6 @@ class FormApp {
       case 'file':
         fieldHtml = this.renderFileField(field, value, error);
         break;
-      // Add other types as needed
     }
     
     if (fieldHtml) {
@@ -1147,7 +1159,7 @@ class FormApp {
           <div style="font-size:4rem;margin-bottom:var(--space-4);">📋</div>
           <h2 style="font-family:var(--font-heading);font-size:var(--text-2xl);margin-bottom:var(--space-2);">Unable to Load Form</h2>
           <p style="color:var(--color-text-secondary);margin-bottom:var(--space-6);">${this.escapeHtml(message)}</p>
-          <a href="/admin" class="btn btn-primary">Go to Dashboard</a>
+          <a href="/login" class="btn btn-primary">Go to Login</a>
         </div>
       </div>
     `;
@@ -1178,4 +1190,8 @@ class FormApp {
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new FormApp();
+  window.app.init();
 });
+
+// Make globally accessible
+window.formApp = window.app;
